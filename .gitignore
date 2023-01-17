@@ -22,6 +22,7 @@ dist/
 # Maven
 target/
 dist/
+src/main/java/com/skillup/infrastructure/jooq
 
 # JetBrains IDE
 .idea/
