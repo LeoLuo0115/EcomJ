@@ -2,10 +2,12 @@ package com.skillup.APIpresentation;
 
 import com.skillup.APIpresentation.dto.in.UserInDto;
 import com.skillup.APIpresentation.dto.out.UserOutDto;
+import com.skillup.APIpresentation.util.ResponseUtil;
 import com.skillup.APIpresentation.util.SkillUpResponse;
 import com.skillup.domian.UserDomain;
 import com.skillup.domian.UserDomainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,17 +32,23 @@ public class UserController {
     UserDomainService userDomainService;
 
     @PostMapping
-    public SkillUpResponse creatUser(@RequestBody UserInDto userInDto) {
+    public ResponseEntity<SkillUpResponse> creatUser(@RequestBody UserInDto userInDto) {
         // create userDomain
-        UserDomain userDomain = toDomain(userInDto);
+        // UserDomain userDomain = toDomain(userInDto);
 
-        // call domain service to create user
-        UserDomain saveeduserDomain = userDomainService.registry(userDomain);
+        UserDomain saveduserDomain = null;
+
+        try {
+            // call domain service to create user
+            saveduserDomain = userDomainService.registry(toDomain(userInDto));
+        } catch (Exception e) {
+            // provide error message, set result equals null
+            return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(ResponseUtil.USER_EXISTS).build());
+
+        }
 
         //create OutDto
-        return SkillUpResponse.builder()
-                .result(toOutDto(saveeduserDomain))
-                .build();
+        return ResponseEntity.status(ResponseUtil.SUCCESS).body(SkillUpResponse.builder().result(toOutDto(saveduserDomain)).build());
 
     }
 
