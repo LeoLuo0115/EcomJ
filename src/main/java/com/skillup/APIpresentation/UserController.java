@@ -5,6 +5,7 @@ import com.skillup.APIpresentation.dto.out.UserOutDto;
 import com.skillup.APIpresentation.util.SkillUpResponse;
 import com.skillup.domian.UserDomain;
 import com.skillup.domian.UserDomainService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,32 +17,48 @@ import java.util.UUID;
 @RequestMapping("/account")
 public class UserController {
 
-    UserDomainService userDomainService = new UserDomainService();
+    // 用 new 不好的原因是因为每有一个请求来，都要new一个对象，但是对象功能是简单的，并且公共的，只是往数据库里存取数据
+    // UserDomainService userDomainService = new UserDomainService();
+
+    // 单例模式
+    // public static UserDomainService userDomainService = new UserDomainService();
+
+    // 我们要把 Service 做成单例模式，要在 Service上加上 @Service, 不需要自己再 new 单例，Spring 会帮我们 new 一个单例出来
+    // 并且把 单例存到一个 map里, 使用关键词 @Autowired 来使用存放的 单例
+
+    @Autowired
+    UserDomainService userDomainService;
 
     @PostMapping
     public SkillUpResponse creatUser(@RequestBody UserInDto userInDto) {
         // create userDomain
         UserDomain userDomain = toDomain(userInDto);
+
+        // call domain service to create user
         UserDomain saveeduserDomain = userDomainService.registry(userDomain);
 
+        //create OutDto
+        return SkillUpResponse.builder()
+                .result(toOutDto(saveeduserDomain))
+                .build();
 
     }
 
     // JAVA Builder 模式， Simple Method Chain
     private UserDomain toDomain(UserInDto userInDto) {
-        return new UserDomain()
+        return UserDomain.builder()
                 .userID(UUID.randomUUID().toString())
                 .userName(userInDto.getUserName())
-                .password(userInDto.getPassword());
+                .password(userInDto.getPassword())
+                .build();
     }
 
 
     private UserOutDto toOutDto(UserDomain userDomain) {
-        UserOutDto userOutDto = new UserOutDto();
-        userOutDto.setUserId(userDomain.getUserID());
-        userOutDto.setUserName(userDomain.getUserName());
-
-        return userOutDto;
+        return UserOutDto.builder()
+                .userId(userDomain.getUserID())
+                .userName(userDomain.getUserName())
+                .build();
     }
 
 }
