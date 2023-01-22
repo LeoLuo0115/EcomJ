@@ -1,4 +1,4 @@
-package com.skillup.presentation;
+package com.skillup.APIpresentation;
 
 import org.springframework.web.bind.annotation.*;
 
