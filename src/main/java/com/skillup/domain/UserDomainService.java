@@ -22,4 +22,9 @@ public class UserDomainService {
     public UserDomain getUserByName(String name) {
         return userRepository.getUserByName(name);
     }
+
+    public UserDomain updateUser(UserDomain userDomain) {
+        userRepository.updateUser(userDomain);
+        return userDomain;
+    }
 }
