@@ -10,7 +10,6 @@ public class SystemController {
     @GetMapping(value = "/system/time")
     public String getName() {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date = df.format(new Date());
-        return date;
+        return df.format(new Date());
     }
 }
