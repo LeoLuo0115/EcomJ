@@ -21,6 +21,12 @@ public class UserController {
     @Autowired
     UserDomainService userDomainService;
 
+    /**
+     * register account api
+     * @param userInDto
+     * @return
+     */
+
     @PostMapping
     public ResponseEntity<SkillUpResponse> createUser(@RequestBody UserInDto userInDto) {
         UserDomain savedUserDomain = null;
