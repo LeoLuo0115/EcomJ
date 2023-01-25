@@ -1,4 +1,4 @@
-package com.skillup.apiPresentation.user.util;
+package com.skillup.apiPresentation.util;
 
 public class SkillResponseUtil {
 

@@ -2,10 +2,13 @@ package com.skillup.infrastructure.repolmpl;
 
 import com.skillup.domain.UserDomain;
 import com.skillup.domain.UserRepository;
+import com.skillup.infrastructure.jooq.tables.User;
 import com.skillup.infrastructure.jooq.tables.records.UserRecord;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public class JooqUserRepo implements UserRepository {
@@ -13,12 +16,12 @@ public class JooqUserRepo implements UserRepository {
 
     @Autowired
     DSLContext dslContext;
+
+    public static final User USER_T = new User();
     @Override
     public void createUser(UserDomain userDomain) {
         dslContext.executeInsert(toRecord(userDomain));
     }
-
-
 
     @Override
     public void updateUser(UserDomain userDomain) {
@@ -27,19 +30,29 @@ public class JooqUserRepo implements UserRepository {
 
     @Override
     public UserDomain getUserById(String id) {
-        return null;
+         Optional<UserDomain> userDomainOptional  = dslContext.selectFrom(USER_T).where(USER_T.USER_ID.eq(id)).fetchOptional(this::toDomain);
+            return userDomainOptional.orElse(null);
     }
 
     @Override
     public UserDomain getUserByName(String name) {
-        return null;
-    }
 
+        Optional<UserDomain> userDomainOptional  = dslContext.selectFrom(USER_T).where(USER_T.USER_NAME.eq(name)).fetchOptional(this::toDomain);
+        return userDomainOptional.orElse(null);
+
+    }
     private UserRecord toRecord(UserDomain userDomain) {
         UserRecord userRecord = new UserRecord();
         userRecord.setUserId(userDomain.getUserId());
         userRecord.setUserName(userDomain.getUserName());
         userRecord.setPassword(userDomain.getPassword());
         return userRecord;
+    }
+    private UserDomain toDomain(UserRecord userRecord) {
+        return UserDomain.builder()
+                .userId(userRecord.getUserId())
+                .userName(userRecord.getUserName())
+                .password(userRecord.getPassword())
+                .build();
     }
 }

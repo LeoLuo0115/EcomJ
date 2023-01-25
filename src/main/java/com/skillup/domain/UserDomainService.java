@@ -15,4 +15,12 @@ public class UserDomainService {
         return  userDomain;
     }
 
+    public UserDomain getUserById(String userId) {
+        return userRepository.getUserById(userId);
+    }
+
+    public UserDomain getUserByName(String userName) {
+        return  userRepository.getUserByName(userName);
+    }
+
 }
