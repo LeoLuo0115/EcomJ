@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 public class UserDomainService {
 
     @Autowired
+    static
     UserRepository userRepository;
+
 
     public UserDomain registry(UserDomain userDomain) {
        //call ORM tool create data into database
@@ -22,5 +24,11 @@ public class UserDomainService {
     public UserDomain getUserByName(String userName) {
         return  userRepository.getUserByName(userName);
     }
+
+    public static UserDomain updateUser(UserDomain userDomain) {
+        userRepository.updateUser(userDomain);
+        return userDomain;
+    }
+
 
 }

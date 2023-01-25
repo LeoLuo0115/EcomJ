@@ -1,5 +1,6 @@
 package com.skillup.apiPresentation.util;
 
+import com.skillup.apiPresentation.dto.in.UserPin;
 import com.skillup.apiPresentation.util.SkillResponseUtil;
 import com.skillup.apiPresentation.util.SkillUpResponse;
 import com.skillup.domain.UserDomain;
@@ -57,7 +58,45 @@ public class UserController {
         }
         //user exists
         return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(SkillUpResponse.builder().result(toOutDto(userDomain)).build());
-    }
+         }
+
+         @PostMapping("/login")
+         public ResponseEntity<SkillUpResponse> login(@RequestBody UserInDto userInDto){
+            //1 try to get user by name
+             UserDomain userDomain = userDomainService.getUserByName(userInDto.getUserName());
+             // 2 user exists?
+             if (Objects.isNull(userDomain)) {
+                 return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(String.format(SkillResponseUtil.USER_NAME_WRONG)).build());
+             }
+             // 3 password match
+             if (!userInDto.getPassword().equals(userDomain.getPassword())) {
+                 ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(SkillResponseUtil.PASSWORD_NOT_MATCH).build());
+             }
+             // 4 match return
+             return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(SkillUpResponse.builder().result(toOutDto(userDomain)).build());
+         }
+
+         @PutMapping("/password")
+         public ResponseEntity<SkillUpResponse> updatePassword(@RequestBody UserPin userPin) {
+            // 1 get user
+             UserDomain userDomain = userDomainService.getUserByName(userPin.getUserName());
+             // 2 user exist
+             if (Objects.isNull(userDomain)) {
+                 return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(String.format(SkillResponseUtil.USER_EXISTS)).build());
+             }
+             // 3 check old password
+             if (!userPin.getOldPassword().equals(userDomain.getPassword())) {
+                 ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(SkillResponseUtil.PASSWORD_NOT_MATCH).build());
+             }
+
+             // 4 update password
+             userDomain.setPassword(userPin.getNewPassword());
+             UserDomain updateUserDomain =  UserDomainService.updateUser(userDomain);
+             return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(SkillUpResponse.builder().result(toOutDto(updateUserDomain)).build());
+
+         }
+
+
     private UserDomain toDomain(UserInDto userInDto) {
 
         return UserDomain.builder()
