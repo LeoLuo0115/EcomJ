@@ -11,4 +11,4 @@ spring:
     baseline-on-migrate: true
     enabled: true
 promotion:
-  stock-strategy: oversell # [oversell, sync]
+  stock-strategy: optimistic # [oversell, sync, optimistic]
