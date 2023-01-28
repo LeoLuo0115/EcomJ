@@ -78,7 +78,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/ login")
+    @PostMapping("/login")
     public ResponseEntity<SkillUpResponse> login(@RequestBody UserInDto userInDto) {
         // 1. get user by name
         UserDomain userDomain = userDomainService.getUserByName(userInDto.getUserName());
