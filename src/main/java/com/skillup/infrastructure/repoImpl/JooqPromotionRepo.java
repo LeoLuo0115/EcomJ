@@ -5,6 +5,7 @@ import com.skillup.domain.promotion.PromotionRepository;
 import com.skillup.domain.promotion.StockOperation;
 import com.skillup.infrastructure.jooq.tables.Promotion;
 import com.skillup.infrastructure.jooq.tables.records.PromotionRecord;
+import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,7 +13,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository(value = "optimistic")
-public class JooqPromotionRepo implements PromotionRepository, StockOperation {
+@Slf4j
+public class JooqPromotionRepo implements PromotionRepository, StockOperation, DomainRecord<PromotionDomain, PromotionRecord>{
     @Autowired
     DSLContext dslContext;
 
@@ -47,6 +49,7 @@ public class JooqPromotionRepo implements PromotionRepository, StockOperation {
          * set available_stock = available_stock - 1, lock_stock = lock_stock + 1
          * where id = promotion_id and available_stock > 0
          */
+        log.info(" start Optimistic-locking...");
         int isLocked = dslContext.update(P_T)
                 .set(P_T.AVAILABLE_STOCK, P_T.AVAILABLE_STOCK.subtract(1))
                 .set(P_T.LOCK_STOCK, P_T.LOCK_STOCK.add(1))
@@ -57,15 +60,35 @@ public class JooqPromotionRepo implements PromotionRepository, StockOperation {
 
     @Override
     public boolean deductStock(String id) {
-        return false;
+        /**
+         * update promotion
+         * set lock_stock = lock_stock - 1
+         * where id = promotion_id and lock_stock > 0
+         */
+        int deducted = dslContext.update(P_T)
+                .set(P_T.LOCK_STOCK, P_T.LOCK_STOCK.subtract(1))
+                .where(P_T.PROMOTION_ID.eq(id).and(P_T.LOCK_STOCK.greaterThan(0L)))
+                .execute();
+        return deducted == 1;
     }
 
     @Override
     public boolean revertStock(String id) {
-        return false;
+        /**
+         * update promotion
+         * set available_stock = available_stock + 1, lock_stock = lock_stock - 1
+         * where id = promotion_id and lock_stock > 0
+         */
+        int reverted = dslContext.update(P_T)
+                .set(P_T.AVAILABLE_STOCK, P_T.AVAILABLE_STOCK.add(1))
+                .set(P_T.LOCK_STOCK, P_T.LOCK_STOCK.subtract(1))
+                .where(P_T.PROMOTION_ID.eq(id).and(P_T.LOCK_STOCK.greaterThan(0L)))
+                .execute();
+        return reverted == 1;
     }
 
 
+    @Override
     public PromotionDomain toDomain(PromotionRecord record) {
         return PromotionDomain.builder()
                 .promotionId(record.getPromotionId())
@@ -83,6 +106,7 @@ public class JooqPromotionRepo implements PromotionRepository, StockOperation {
                 .build();
     }
 
+    @Override
     public PromotionRecord toRecord(PromotionDomain domain) {
         return new PromotionRecord(
                 domain.getPromotionId(),
