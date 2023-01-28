@@ -1,9 +1,10 @@
 package com.skillup.apiPresentation;
 
+import com.skillup.apiPresentation.dto.in.UserPin;
 import com.skillup.apiPresentation.util.SkillResponseUtil;
 import com.skillup.apiPresentation.util.SkillUpResponse;
-import com.skillup.domain.UserDomain;
-import com.skillup.domain.UserDomainService;
+import com.skillup.domain.user.UserDomain;
+import com.skillup.domain.user.UserDomainService;
 import com.skillup.apiPresentation.dto.in.UserInDto;
 import com.skillup.apiPresentation.dto.out.UserOutDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,38 @@ public class UserController {
         return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(SkillUpResponse.builder().result(toOutDto(userDomain)).build());
 
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<SkillUpResponse> login(@RequestBody UserInDto userInDto){
+        UserDomain userDomain = userDomainService.getUserByName(userInDto.getUserName());
+        if(Objects.isNull(userDomain)){
+            return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(String.format(SkillResponseUtil.USER_NAME_WRONG, userInDto.getUserName())).build());
+        }
+
+        if(!userInDto.getPassword().equals(userDomain.getPassword())){
+            return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(SkillResponseUtil.PASSWORD_NOT_MATCH).build());
+        }
+        return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(SkillUpResponse.builder().result(toOutDto(userDomain)).build());
+
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<SkillUpResponse> updatePassword(@RequestBody UserPin userPin){
+        UserDomain userDomain = userDomainService.getUserByName(userPin.getUserName());
+        if(Objects.isNull(userDomain)){
+            return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(String.format(SkillResponseUtil.USER_NAME_WRONG, userPin.getUserName())).build());
+        }
+        if(!userPin.getOldPassword().equals(userDomain.getPassword())){
+            return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(SkillResponseUtil.PASSWORD_NOT_MATCH).build());
+        }
+
+        userDomain.setPassword(userPin.getNewPassword());
+        UserDomain updateUserDomain = userDomainService.updateUser(userDomain);
+
+        return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(SkillUpResponse.builder().result(updateUserDomain).build());
+
+    }
+
 
     private UserDomain toDomain(UserInDto userInDto){
         return UserDomain.builder()

@@ -1,4 +1,4 @@
-package com.skillup.domain;
+package com.skillup.domain.user;
 
 public interface UserRepository {
 
@@ -9,4 +9,6 @@ public interface UserRepository {
     UserDomain getUserById(String id);
 
     UserDomain getUserByName(String name);
+
+
 }

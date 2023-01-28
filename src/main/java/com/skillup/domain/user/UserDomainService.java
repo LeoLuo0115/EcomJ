@@ -1,4 +1,4 @@
-package com.skillup.domain;
+package com.skillup.domain.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,5 +19,11 @@ public class UserDomainService {
 
     public UserDomain getUserByName(String userName){
         return userRepository.getUserByName(userName);
+    }
+
+
+    public UserDomain updateUser(UserDomain userDomain) {
+        userRepository.updateUser(userDomain);
+        return userDomain;
     }
 }
