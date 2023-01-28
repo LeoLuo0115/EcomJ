@@ -14,4 +14,17 @@ public class UserDomainService {
         userRepository.createUser(userDomain);
         return userDomain;
     }
+
+    public UserDomain getUserByID(String userID) {
+        return userRepository.getUserByID(userID);
+    }
+
+    public UserDomain getUserByName(String name) {
+        return userRepository.getUserByName(name);
+    }
+
+    public UserDomain updateUser(UserDomain userDomain) {
+        userRepository.updateUser(userDomain);
+        return userDomain;
+    }
 }

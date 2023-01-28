@@ -1,6 +1,7 @@
 package com.skillup.APIpresentation;
 
 import com.skillup.APIpresentation.dto.in.UserInDto;
+import com.skillup.APIpresentation.dto.in.UserInPin;
 import com.skillup.APIpresentation.dto.out.UserOutDto;
 import com.skillup.APIpresentation.util.ResponseUtil;
 import com.skillup.APIpresentation.util.SkillUpResponse;
@@ -8,11 +9,9 @@ import com.skillup.domian.UserDomain;
 import com.skillup.domian.UserDomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -31,6 +30,7 @@ public class UserController {
     @Autowired
     UserDomainService userDomainService;
 
+    // API
     @PostMapping
     public ResponseEntity<SkillUpResponse> creatUser(@RequestBody UserInDto userInDto) {
         // create userDomain
@@ -52,6 +52,75 @@ public class UserController {
 
     }
 
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<SkillUpResponse> getUserByID(@PathVariable("id") String userID) {
+        UserDomain userDomain = userDomainService.getUserByID(userID);
+
+        // user not exist
+        if (Objects.isNull(userDomain)) {
+            return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(String.format(ResponseUtil.USER_ID_WRONG, userID)).build());
+        }
+        // user exists
+        return ResponseEntity.status(ResponseUtil.SUCCESS).body(SkillUpResponse.builder().result(toOutDto(userDomain)).build());
+    }
+
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<SkillUpResponse> getUserByName(@PathVariable("name") String name) {
+        UserDomain userDomain = userDomainService.getUserByName(name);
+
+        if (Objects.isNull(userDomain)) {
+            return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(String.format(ResponseUtil.USER_NAME_WRONG, name)).build());
+        }
+
+        return ResponseEntity.status(ResponseUtil.SUCCESS).body(SkillUpResponse.builder().result(toOutDto(userDomain)).build());
+    }
+
+
+    @PostMapping("/ login")
+    public ResponseEntity<SkillUpResponse> login(@RequestBody UserInDto userInDto) {
+        // 1. get user by name
+        UserDomain userDomain = userDomainService.getUserByName(userInDto.getUserName());
+
+        // 2. check user exists
+        if(Objects.isNull(userDomain)) {
+            return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(String.format(ResponseUtil.USER_NAME_WRONG, userInDto.getUserName())).build());
+        }
+        // 3. password not match
+        if(!userInDto.getPassword().equals(userDomain.getPassword())) {
+            return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(String.format(ResponseUtil.PASSWORD_NOT_MATCH)).build());
+        }
+
+        // 4. match return
+        return ResponseEntity.status(ResponseUtil.SUCCESS).body(SkillUpResponse.builder().result(toOutDto(userDomain)).build());
+    }
+
+
+    @PutMapping("/password")
+    public ResponseEntity<SkillUpResponse> updatePassword(@RequestBody UserInPin userInPin) {
+        // 1. get user
+        UserDomain userDomain = userDomainService.getUserByName(userInPin.getUserName());
+
+        // 2. user not exists
+        if(Objects.isNull(userDomain)) {
+            return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(String.format(ResponseUtil.USER_NAME_WRONG, userInPin.getUserName())).build());
+        }
+        // 3. check old password
+        if (!userInPin.getOldPassword().equals(userDomain.getPassword())) {
+            return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(String.format(ResponseUtil.PASSWORD_NOT_MATCH)).build());
+        }
+
+        // 4. update new pin
+        userDomain.setPassword(userInPin.getNewPassword());
+        UserDomain updateedUserDomain = userDomainService.updateUser(userDomain);
+        return ResponseEntity.status(ResponseUtil.SUCCESS).body(SkillUpResponse.builder().result(toOutDto(updateedUserDomain)).build());
+    }
+
+
+
+
+    // Data type transfer
     // JAVA Builder 模式， Simple Method Chain
     private UserDomain toDomain(UserInDto userInDto) {
         return UserDomain.builder()
