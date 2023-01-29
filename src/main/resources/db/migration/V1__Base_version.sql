@@ -1,7 +1,7 @@
 CREATE TABLE user (
     user_id     varchar(36)     not null,
-    user_name   varchar(100)    not null unique,
-    password    varchar(32)    not null,
+    user_name   varchar(100)    BINARY null unique,
+    password    varchar(32)    BINARY not null,
     primary key(user_id)
 ) ENGINE = InnoDB CHARSET=utf8mb4;
 
