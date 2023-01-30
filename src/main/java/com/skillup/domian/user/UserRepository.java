@@ -1,6 +1,4 @@
-package com.skillup.domian;
-
-import com.skillup.infrastructure.jooq.tables.User;
+package com.skillup.domian.user;
 
 public interface UserRepository {
     void createUser(UserDomain userDomain);
