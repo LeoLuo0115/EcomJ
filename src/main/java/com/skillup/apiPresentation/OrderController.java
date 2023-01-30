@@ -24,6 +24,8 @@ public class OrderController {
     @Value("${order.machine-num}")
     Integer machineNum;
 
+    @Value("${order.data-center}")
+    Integer dataCenter;
     @Autowired
     OrderService orderService;
 
@@ -35,7 +37,7 @@ public class OrderController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<OrderOutDto> getOrderById(@PathVariable("id") Long orderNum) {
-        log.info("Get order from Machine: {}", machineNum);
+        log.info("Get order from DataCenter: {}, Machine: {}", dataCenter, machineNum);
         OrderDomain orderDomain = orderService.getOrderById(orderNum);
         if (Objects.isNull(orderDomain)) {
             return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(null);
@@ -63,7 +65,7 @@ public class OrderController {
 
     private OrderOutDto toOrderOutDto(OrderDomain orderDomain) {
         return OrderOutDto.builder()
-                .orderNumber(orderDomain.getOrderNumber())
+                .orderNumber(orderDomain.getOrderNumber().toString())
                 .userId(orderDomain.getUserId())
                 .promotionId(orderDomain.getPromotionId())
                 .promotionName(orderDomain.getPromotionName())

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class OrderDomain {
     private Long orderNumber;
 
-    //订单状态 0:预订单 -1:库存不足订单，1:已创建等待付款, 2表示已付款, 3订单过期或者无效
+    //订单状态 0:预订单, -2:promotion not exist, -1:库存不足订单，1:已创建等待付款, 2表示已付款, 3订单过期或者无效
     private OrderStatus orderStatus;
 
     private String promotionId;
