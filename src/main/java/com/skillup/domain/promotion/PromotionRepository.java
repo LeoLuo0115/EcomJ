@@ -8,4 +8,7 @@ public interface PromotionRepository {
     PromotionDomain getPromotionById(String id);
 
     List<PromotionDomain> getPromotionByStatus(Integer status);
+
+    void updatePromotion(PromotionDomain promotionById);
+    //update mei xie implementation
 }

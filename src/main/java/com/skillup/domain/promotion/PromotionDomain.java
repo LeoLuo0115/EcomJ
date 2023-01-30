@@ -13,28 +13,28 @@ import java.time.LocalDateTime;
 @Builder
 public class PromotionDomain {
 
-    String promotionId;
+    private String promotionId;
 
-    String promotionName;
+    private String promotionName;
 
-    String commodityId;
+    private String commodityId;
 
-    Integer originalPrice;
+    private Integer originalPrice;
 
-    Integer promotionalPrice;
+    private Integer promotionalPrice;
 
-    LocalDateTime startTime;
+    private LocalDateTime startTime;
 
 
-    LocalDateTime endTime;
+    private LocalDateTime endTime;
 
-    Integer status;
+    private Integer status;
 
-    Long totalStock;
+    private Long totalStock;
 
-    Long availableStock;
+    private Long availableStock;
 
-    Long lockStock;
+    private Long lockStock;
 
-    String imageUrl;
+    private String imageUrl;
 }

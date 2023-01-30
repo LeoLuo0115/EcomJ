@@ -58,6 +58,39 @@ public class PromotionController {
         return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().build());
     }
 
+    @PostMapping("/lock/id/{id}")
+    public ResponseEntity<Boolean> lockStock(@PathVariable("id") String id){
+        PromotionDomain promotionById = promotionDomainService.getPromotionById(id);
+        if (Objects.isNull(promotionById)) {
+            return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(false);
+        }
+        System.out.println("right before controller cal");
+        boolean isLocked = promotionDomainService.lockstock(id);
+        return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(isLocked);
+    }
+
+    @PostMapping("/deduct/id/{id}")
+    public ResponseEntity<Boolean> deductStock(@PathVariable("id") String id){
+        PromotionDomain promotionById = promotionDomainService.getPromotionById(id);
+        if (Objects.isNull(promotionById)) {
+            return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(false);
+
+        }
+        boolean isDeducted = promotionDomainService.deductStock(id);
+        return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(isDeducted);
+    }
+
+    @PostMapping("/revert/id/{id}")
+    public ResponseEntity<Boolean> revertStock(@PathVariable("id") String id){
+        PromotionDomain promotionById = promotionDomainService.getPromotionById(id);
+        if (Objects.isNull(promotionById)) {
+            return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(false);
+
+        }
+        boolean isReverted = promotionDomainService.revertStock(id);
+        return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(isReverted);
+    }
+
 
 
 
