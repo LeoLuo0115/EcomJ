@@ -1,4 +1,5 @@
-package com.skillup.domian;
+package com.skillup.APIpresentation.dto.in;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +10,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDomain {
-    private String userID;
-    private String userName;
-    private String password;
+public class CommodityInDto {
+    String commodityName;
+
+    String description;
+
+    Integer price;
+
+    String imageUrl;
 }

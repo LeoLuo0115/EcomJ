@@ -1,4 +1,4 @@
-package com.skillup.domian;
+package com.skillup.domian.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
