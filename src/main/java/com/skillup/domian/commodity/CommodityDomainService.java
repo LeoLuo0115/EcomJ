@@ -14,4 +14,8 @@ public class CommodityDomainService {
         return commodityDomain;
     }
 
+    public CommodityDomain getCommodityById(String commodityId) {
+        return CommodityRepository.getCommodityById(commodityId);
+    }
+
 }

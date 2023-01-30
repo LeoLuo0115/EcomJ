@@ -8,10 +8,7 @@ import com.skillup.domian.commodity.CommodityDomain;
 import com.skillup.domian.commodity.CommodityDomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -23,6 +20,8 @@ public class CommodityController {
     CommodityDomainService commodityDomainService;
 
     // Create Commodity API
+    // There is no logic to catch errors, return error msg
+    // this can be improved by looking at how userDomianService is implemented.
     @PostMapping
     public ResponseEntity<CommodityOutDto> createCommodity(@RequestBody CommodityInDto commodityInDto) {
 
@@ -30,6 +29,15 @@ public class CommodityController {
 
 
         return ResponseEntity.status(ResponseUtil.SUCCESS).body(toOutDto(savedCommodityDomain));
+    }
+
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<CommodityOutDto> getCommodity(@PathVariable("id") String commodityId ) {
+
+        CommodityDomain commodityDomain = commodityDomainService.getCommodityById(commodityId);
+
+        return ResponseEntity.status(ResponseUtil.SUCCESS).body(toOutDto(commodityDomain));
     }
 
     private CommodityDomain toDomain(CommodityInDto commodityInDto) {
