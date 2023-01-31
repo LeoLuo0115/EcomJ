@@ -51,6 +51,10 @@ window.onload = function() {
 			document.getElementById('icon4').src = "img/items/" + data.imageUrl + "/icon4.jpg";
 			document.getElementById('icon5').src = "img/items/" + data.imageUrl + "/icon5.jpg";
 
+			document.getElementById('banner1').src = "img/items/" + data.imageUrl + "/banner1.jpg";
+			document.getElementById('banner2').src = "img/items/" + data.imageUrl + "/banner2.jpg";
+			document.getElementById('banner3').src = "img/items/" + data.imageUrl + "/banner3.jpg";
+
 			commodityId = data.commodityId;
 			$.ajax({
 				type: 'GET',
@@ -62,9 +66,7 @@ window.onload = function() {
 					console.log(data);
 					$('#description').html(data.description);
 
-					document.getElementById('banner1').src = "img/items/" + data.imageUrl + "/banner1.jpg";
-					document.getElementById('banner2').src = "img/items/" + data.imageUrl + "/banner2.jpg";
-					document.getElementById('banner3').src = "img/items/" + data.imageUrl + "/banner3.jpg";
+
 				},
 				error: function (data) {
 					alert("error: " + data);

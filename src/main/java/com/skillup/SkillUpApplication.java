@@ -8,6 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SkillUpApplication {
     public static void main(String[] args) {
         SpringApplication.run(SkillUpApplication.class, args);
-        System.out.println("Welcome to Raphael E-commerce platform1");
+        System.out.println("Welcome to Raphael E-commerce platform3");
     }
 }
