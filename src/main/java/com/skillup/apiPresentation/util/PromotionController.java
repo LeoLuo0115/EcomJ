@@ -11,38 +11,78 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/promotion")
-
 public class PromotionController {
+
     @Autowired
     PromotionService promotionService;
+
     @PostMapping
     public ResponseEntity<PromotionOutDto> createPromotion(@RequestBody PromotionInDto promotionInDto) {
-        PromotionDomain PromotionDomainSaved  = promotionService.createPromotion(toDomain(promotionInDto));
-        return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(toPromotionDomainOutDto(PromotionDomainSaved));
+        PromotionDomain promotionDomainSaved = promotionService.createPromotion(toDomain(promotionInDto));
+        return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(toPromotionOutDto(promotionDomainSaved));
     }
 
     @GetMapping("/id/{id}")
-    public  ResponseEntity<PromotionOutDto> getPromotionById(@PathVariable("id") String id) {
-        // hit promotion cache. stock maynot accurate
+    public ResponseEntity<PromotionOutDto> getPromotionById(@PathVariable("id") String id) {
+
+        // if hit promotion cache, stock may not accurate
         PromotionDomain promotionDomain = promotionService.getPromotionById(id);
         if (Objects.isNull(promotionDomain)) {
             return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(null);
         }
-        return  ResponseEntity.status(SkillResponseUtil.SUCCESS).body(toPromotionDomainOutDto(promotionDomain));
+        return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(toPromotionOutDto(promotionDomain));
     }
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<PromotionOutDto>> getPromotionByStatus(@PathVariable("status")Integer status) {
+    public ResponseEntity<List<PromotionOutDto>> getPromotionByStatus(@PathVariable("status") Integer status) {
         List<PromotionDomain> promotionDomainList = promotionService.getPromotionByStatus(status);
         return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(
-                promotionDomainList.stream().map(this::toPromotionOutDto).collect(collectors.toList())
+                promotionDomainList.stream().map(this::toPromotionOutDto).collect(Collectors.toList())
         );
     }
 
-    private PromotionDomain toDomain(PromotionInDto promotionInDto){
+    @PostMapping("/lock/id/{id}")
+    public ResponseEntity<Boolean> lockStock(@PathVariable("id") String id) {
+        // 1. check promotion existing
+        PromotionDomain promotionDomain = promotionService.getPromotionById(id);
+        if (Objects.isNull(promotionDomain)) {
+            return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(false);
+        }
+        // 2 boolean isLocked = promotionService.lockStock(id);
+        boolean isLocked = promotionService.lockStock(id);
+        return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(isLocked);
+    }
+
+    @PostMapping("/deduct/id/{id}")
+    public ResponseEntity<Boolean> deductStock(@PathVariable("id") String id) {
+        // 1. check promotion
+        PromotionDomain promotionDomain = promotionService.getPromotionById(id);
+        if (Objects.isNull(promotionDomain)) {
+            return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(false);
+        }
+        boolean isDeducted = promotionService.deductStock(id);
+        return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(isDeducted);
+    }
+
+    /**
+     * Revert Available Stock in Cache
+     */
+    @PostMapping("/revert/id/{id}")
+    public ResponseEntity<Boolean> revertStock(@PathVariable("id") String id) {
+        // 1. check promotion
+        PromotionDomain promotionDomain = promotionService.getPromotionById(id);
+        if (Objects.isNull(promotionDomain)) {
+            return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(false);
+        }
+        boolean isReverted = promotionService.revertStock(id);
+        return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(isReverted);
+    }
+
+    private PromotionDomain toDomain(PromotionInDto promotionInDto) {
         return PromotionDomain.builder()
                 .promotionId(UUID.randomUUID().toString())
                 .promotionName(promotionInDto.getPromotionName())
@@ -50,29 +90,29 @@ public class PromotionController {
                 .startTime(promotionInDto.getStartTime())
                 .endTime(promotionInDto.getEndTime())
                 .originalPrice(promotionInDto.getOriginalPrice())
-                .promotionPrice(promotionInDto.getPromotionPrice())
+                .promotionalPrice(promotionInDto.getPromotionalPrice())
                 .totalStock(promotionInDto.getTotalStock())
-                .avaliableStock(promotionInDto.getAvaliableStock())
+                .availableStock(promotionInDto.getAvailableStock())
                 .lockStock(promotionInDto.getLockStock())
                 .imageUrl(promotionInDto.getImageUrl())
+                .status(promotionInDto.getStatus())
                 .build();
     }
 
-    private PromotionDomain toPromotionDomainOutDto(PromotionOutDto promotionOutDto) {
-        return PromotionDomain.builder()
-                .promotionId(UUID.randomUUID().toString())
-                .promotionName(promotionOutDto.getPromotionName())
-                .commodityId(promotionOutDto.getCommodityId())
-                .startTime(promotionOutDto.getStartTime())
-                .endTime(promotionOutDto.getEndTime())
-                .originalPrice(promotionOutDto.getOriginalPrice())
-                .promotionPrice(promotionOutDto.getPromotionPrice())
-                .totalStock(promotionOutDto.getTotalStock())
-                .avaliableStock(promotionOutDto.getAvaliableStock())
-                .lockStock(promotionOutDto.getLockStock())
-                .imageUrl(promotionOutDto.getImageUrl())
+    private PromotionOutDto toPromotionOutDto(PromotionDomain promotionDomain) {
+        return PromotionOutDto.builder()
+                .promotionId(promotionDomain.getPromotionId())
+                .promotionName(promotionDomain.getPromotionName())
+                .commodityId(promotionDomain.getCommodityId())
+                .startTime(promotionDomain.getStartTime())
+                .endTime(promotionDomain.getEndTime())
+                .totalStock(promotionDomain.getTotalStock())
+                .availableStock(promotionDomain.getAvailableStock())
+                .lockStock(promotionDomain.getLockStock())
+                .originalPrice(promotionDomain.getOriginalPrice())
+                .promotionalPrice(promotionDomain.getPromotionalPrice())
+                .imageUrl(promotionDomain.getImageUrl())
+                .status(promotionDomain.getStatus())
                 .build();
     }
-
-
 }
