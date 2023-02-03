@@ -1,4 +1,4 @@
-package com.skillup.domain;
+package com.skillup.domain.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,8 @@
 package com.skillup.domain.promotion;
 
 
+import java.util.List;
+
 public interface PromotionRepository {
 
     void createPromotion(PromotionDomain promotionDomain);

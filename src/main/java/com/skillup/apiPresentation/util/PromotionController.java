@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public class PromotionController {
     @PostMapping
     public ResponseEntity<PromotionOutDto> createPromotion(@RequestBody PromotionInDto promotionInDto) {
         PromotionDomain PromotionDomainSaved  = promotionService.createPromotion(toDomain(promotionInDto));
-        return ResponseEntity.status(ResponseUtil.SUCCESS).body(toPromotionDomainOutDto(PromotionDomainSaved));
+        return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(toPromotionDomainOutDto(PromotionDomainSaved));
     }
 
     @GetMapping("/id/{id}")
@@ -28,15 +29,15 @@ public class PromotionController {
         // hit promotion cache. stock maynot accurate
         PromotionDomain promotionDomain = promotionService.getPromotionById(id);
         if (Objects.isNull(promotionDomain)) {
-            return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(null);
+            return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(null);
         }
-        return  ResponseEntity.status(ResponseUtil.SUCCESS).body(toPromotionDomainOutDto(promotionDomain));
+        return  ResponseEntity.status(SkillResponseUtil.SUCCESS).body(toPromotionDomainOutDto(promotionDomain));
     }
 
     @GetMapping("/status/{status}")
     public ResponseEntity<List<PromotionOutDto>> getPromotionByStatus(@PathVariable("status")Integer status) {
         List<PromotionDomain> promotionDomainList = promotionService.getPromotionByStatus(status);
-        return ResponseEntity.status(ResponseUtil.SUCCESS).body(
+        return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(
                 promotionDomainList.stream().map(this::toPromotionOutDto).collect(collectors.toList())
         );
     }
