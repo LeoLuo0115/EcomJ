@@ -1,6 +1,8 @@
-package com.skillup.apiPresentation.util;
+package com.skillup.apiPresentation;
 
 import com.skillup.apiPresentation.dto.in.UserPin;
+import com.skillup.apiPresentation.util.SkillResponseUtil;
+import com.skillup.apiPresentation.util.SkillUpResponse;
 import com.skillup.domain.user.UserDomain;
 import com.skillup.domain.user.UserDomainService;
 import com.skillup.apiPresentation.dto.in.UserInDto;

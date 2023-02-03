@@ -15,7 +15,7 @@ import java.util.List;
 
 @Repository(value = "optimistic")
 @Slf4j
-public class JooqPromotionRepo implements PromotionRepository, StockOperation, DomainRecord<PromotionDomain, PromotionRecord>{
+public class JooqPromotionRepo implements PromotionRepository, StockOperation, DomainRecord<PromotionDomain, DomainRecord>{
     @Autowired
     DSLContext dslContext;
 
@@ -90,7 +90,7 @@ public class JooqPromotionRepo implements PromotionRepository, StockOperation, D
 
 
     @Override
-    public PromotionDomain toDomain(PromotionRecord record) {
+    public PromotionDomain toDomain(com.skillup.infrastructure.repolmpl.DomainRecord record) {
         return PromotionDomain.builder()
                 .promotionId(record.getPromotionId())
                 .promotionName(record.getPromotionName())
@@ -108,8 +108,8 @@ public class JooqPromotionRepo implements PromotionRepository, StockOperation, D
     }
 
     @Override
-    public PromotionRecord toRecord(PromotionDomain domain) {
-        return new PromotionRecord(
+    public com.skillup.infrastructure.repolmpl.DomainRecord toRecord(PromotionDomain domain) {
+        return new com.skillup.infrastructure.repolmpl.DomainRecord(
                 domain.getPromotionId(),
                 domain.getPromotionName(),
                 domain.getCommodityId(),

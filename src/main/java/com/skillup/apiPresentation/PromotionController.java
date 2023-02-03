@@ -1,7 +1,8 @@
-package com.skillup.apiPresentation.util;
+package com.skillup.apiPresentation;
 
 import com.skillup.apiPresentation.dto.in.PromotionInDto;
 import com.skillup.apiPresentation.dto.out.PromotionOutDto;
+import com.skillup.apiPresentation.util.SkillResponseUtil;
 import com.skillup.domain.promotion.PromotionDomain;
 import com.skillup.domain.promotion.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
