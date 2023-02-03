@@ -8,7 +8,7 @@ public class SkillResponseUtil {
 
     public static final int INTERNAL_ERROR = 500;
 
-    public static final String USER_EXISTS = "User already exsts;";
+    public static final String USER_EXISTS = "User already exists;";
 
     public static final String USER_ID_WRONG = "UserId: %s, is wrong.";
 
