@@ -58,7 +58,7 @@ public class UserController {
         }
         //user exists
         return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(SkillUpResponse.builder().result(toOutDto(userDomain)).build());
-         }
+    }
 
     @PostMapping("/login")
     public ResponseEntity<SkillUpResponse> login(@RequestBody UserInDto userInDto){
