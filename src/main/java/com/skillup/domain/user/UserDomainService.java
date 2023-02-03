@@ -9,7 +9,6 @@ public class UserDomainService {
     @Autowired
     UserRepository userRepository;
 
-
     public UserDomain registry(UserDomain userDomain) {
        //call ORM tool create data into database
         userRepository.createUser(userDomain);

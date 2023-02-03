@@ -10,30 +10,30 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class PromotionDomain {
+    private String promotionId;
 
-    String promotionId;
+    private String promotionName;
 
-    String promotionName;
+    private String commodityId;
 
-    String commodityId;
+    private Integer originalPrice;
 
-    Integer originalPrice;
+    private Integer promotionalPrice;
 
-    Integer promotionPrice;
+    private LocalDateTime startTime;
 
-    LocalDateTime startTime;
+    private LocalDateTime endTime;
 
-    LocalDateTime endTime;
-/*
-        0 not start; 1 releasing; 2 end
- */
-    Integer status;
+    /*
+    0 not start, 1 active, 2 end
+     */
+    private Integer status;
 
-    Long totalStock;
+    private Long totalStock;
 
-    Long avaliableStock;
+    private Long availableStock;
 
-    Long lockStock;
+    private Long lockStock;
 
-    String imageUrl;
+    private String imageUrl;
 }
