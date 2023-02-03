@@ -32,12 +32,11 @@ public class JooqUserRepo implements UserRepository {
     @Override
     public UserDomain getUserById(String id) {
          Optional<UserDomain> userDomainOptional  = dslContext.selectFrom(USER_T).where(USER_T.USER_ID.eq(id)).fetchOptional(this::toDomain);
-            return userDomainOptional.orElse(null);
+         return userDomainOptional.orElse(null);
     }
 
     @Override
     public UserDomain getUserByName(String name) {
-
         Optional<UserDomain> userDomainOptional  = dslContext.selectFrom(USER_T).where(USER_T.USER_NAME.eq(name)).fetchOptional(this::toDomain);
         return userDomainOptional.orElse(null);
 

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 public class UserDomainService {
 
     @Autowired
-    static
     UserRepository userRepository;
 
 
@@ -25,7 +24,7 @@ public class UserDomainService {
         return  userRepository.getUserByName(userName);
     }
 
-    public static UserDomain updateUser(UserDomain userDomain) {
+    public UserDomain updateUser(UserDomain userDomain) {
         userRepository.updateUser(userDomain);
         return userDomain;
     }
