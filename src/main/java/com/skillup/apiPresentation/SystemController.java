@@ -1,4 +1,4 @@
-package com.skillup.presentation;
+package com.skillup.apiPresentation;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -6,11 +6,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
-public class SystemController {
+public class  SystemController {
     @GetMapping(value = "/system/time")
     public String getName() {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = df.format(new Date());
         return date;
     }
+
 }
