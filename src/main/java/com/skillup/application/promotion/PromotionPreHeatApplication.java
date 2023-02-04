@@ -34,7 +34,7 @@ public class PromotionPreHeatApplication implements ApplicationRunner {
             // 1. cache active promotion(cache)domain
             promotionCacheService.updatePromotion(CacheDomainMapper.domainToCache(promotionDomain));
             // 2. cache active stock info
-            stockCacheService.setAvailableStock(StockCacheDomain.createStockKey(promotionDomain.getPromotionId()), promotionDomain.getAvailableStock());
+            stockCacheService.setAvailableStock(promotionDomain.getPromotionId(), promotionDomain.getAvailableStock());
         });
     }
 }

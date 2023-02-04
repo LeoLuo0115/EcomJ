@@ -55,7 +55,6 @@ public class PromotionController {
 
     @PostMapping("/lock/id/{id}")
     public ResponseEntity<Boolean> lockStock(@PathVariable("id") String id) {
-        // TODO : SUPPORT CACHE
         // 1. check promotion existing
         PromotionDomain promotionDomain = promotionApplication.getPromotionById(id);
         if (Objects.isNull(promotionDomain)) {
