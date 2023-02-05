@@ -1,4 +1,4 @@
-package com.skillup.apiPresentation.user.dto.out;
+package com.skillup.apiPresentation.dto.out;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

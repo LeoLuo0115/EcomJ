@@ -1,18 +1,16 @@
-package com.skillup.apiPresentation.user;
+package com.skillup.apiPresentation;
 
 import com.skillup.apiPresentation.util.SkillUpResponseUtil;
 import com.skillup.domain.UserDomain;
 import com.skillup.domain.UserDomainService;
-import com.skillup.apiPresentation.user.dto.in.UserInDto;
-import com.skillup.apiPresentation.user.dto.out.UserOutDto;
+import com.skillup.apiPresentation.dto.in.UserInDto;
+import com.skillup.apiPresentation.dto.out.UserOutDto;
 import com.skillup.apiPresentation.util.SkillUpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -20,7 +18,8 @@ import java.util.UUID;
 public class UserController {
     @Autowired
     UserDomainService userDomainService;
-    @RequestMapping() // route inherit from the outer class
+
+    @PostMapping// route inherit from the outer class
     public ResponseEntity<SkillUpResponse> createUser(@RequestBody UserInDto userInDto){
         // Domain layer only deals with Domain, so we need to convert Dto to domain, then to outDto
         UserDomain savedUserDomain = null;
@@ -45,6 +44,39 @@ public class UserController {
                 .result(toOutDto(savedUserDomain))
                 .build());
     }
+
+    @GetMapping("/id/{id}") // route inherit from the outer class
+    public ResponseEntity<SkillUpResponse> getUserById(@PathVariable("id") String userId){
+        // user service get user
+        UserDomain userDomain = userDomainService.getUserById(userId);
+        // user not exist
+        if (Objects.isNull(userDomain)) {
+            return  ResponseEntity.status(SkillUpResponseUtil.BAD_REQUEST).body(
+                            SkillUpResponse.builder()
+                            .msg(String.format(SkillUpResponseUtil.USER_ID_WRONG, userId))
+                            .build());
+        }
+        return ResponseEntity.status(SkillUpResponseUtil.SUCCESS).body(
+                SkillUpResponse.builder().result(toOutDto(userDomain)).build()
+        );
+    }
+
+    @GetMapping("/name/{name}") // route inherit from the outer class
+    public ResponseEntity<SkillUpResponse> getUserByName(@PathVariable("name") String name){
+        // user service get user
+        UserDomain userDomain = userDomainService.getUserByName(name);
+        // user not exist
+        if (Objects.isNull(userDomain)) {
+            return  ResponseEntity.status(SkillUpResponseUtil.BAD_REQUEST).body(
+                    SkillUpResponse.builder()
+                            .msg(String.format(SkillUpResponseUtil.USER_NAME_WRONG, name))
+                            .build());
+        }
+        return ResponseEntity.status(SkillUpResponseUtil.SUCCESS).body(
+                SkillUpResponse.builder().result(toOutDto(userDomain)).build()
+        );
+    }
+
     private UserDomain toDomain(UserInDto userInDto){
         return UserDomain.builder() // return a Builder class (no "new" explicitly)
                 .userId(UUID.randomUUID().toString()) // return that Builder class

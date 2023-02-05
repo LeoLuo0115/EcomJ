@@ -12,4 +12,14 @@ public class UserDomainService {
         userRepository.createUser(userDomain);
         return userDomain;
     };
+
+    public UserDomain getUserById(String userId) {
+        UserDomain userDomain = userRepository.getUserById(userId);
+        return userDomain;
+    }
+
+    public UserDomain getUserByName(String name) {
+        UserDomain userDomain = userRepository.getUserByName(name);
+        return userDomain;
+    }
 }
