@@ -10,5 +10,7 @@ public class ResponseUtil {
     public static final String USER_ID_WRONG = "UserId: %s, is wrong.";
     public static final String USER_NAME_WRONG = "UserName: %s, is wrong.";
     public static final String PASSWORD_NOT_MATCH = "Password provided not match.";
+
+
 }
 

@@ -5,7 +5,7 @@ import com.skillup.APIpresentation.dto.in.CommodityInDto;
 import com.skillup.APIpresentation.dto.out.CommodityOutDto;
 import com.skillup.APIpresentation.util.ResponseUtil;
 import com.skillup.domian.commodity.CommodityDomain;
-import com.skillup.domian.commodity.CommodityDomainService;
+import com.skillup.domian.commodity.CommodityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,15 +17,15 @@ import java.util.UUID;
 public class CommodityController {
 
     @Autowired
-    CommodityDomainService commodityDomainService;
+    CommodityService commodityService;
 
     // Create Commodity API
     // There is no logic to catch errors, return error msg
-    // this can be improved by looking at how userDomianService is implemented.
+    // this can be improved by looking at how userDomainService is implemented.
     @PostMapping
     public ResponseEntity<CommodityOutDto> createCommodity(@RequestBody CommodityInDto commodityInDto) {
 
-        CommodityDomain savedCommodityDomain = commodityDomainService.registry(toDomain(commodityInDto));
+        CommodityDomain savedCommodityDomain = commodityService.registry(toDomain(commodityInDto));
 
 
         return ResponseEntity.status(ResponseUtil.SUCCESS).body(toOutDto(savedCommodityDomain));
@@ -35,7 +35,11 @@ public class CommodityController {
     @GetMapping("/id/{id}")
     public ResponseEntity<CommodityOutDto> getCommodity(@PathVariable("id") String commodityId ) {
 
-        CommodityDomain commodityDomain = commodityDomainService.getCommodityById(commodityId);
+        CommodityDomain commodityDomain = commodityService.getCommodityById(commodityId);
+
+//        if(commodityDomain.equals(null)) {
+//
+//        }
 
         return ResponseEntity.status(ResponseUtil.SUCCESS).body(toOutDto(commodityDomain));
     }
