@@ -4,14 +4,13 @@ import com.skillup.domain.UserDomain;
 import com.skillup.domain.UserDomainService;
 import com.skillup.presentation.dto.in.UserInDto;
 import com.skillup.presentation.dto.out.UserOutDto;
+import com.skillup.presentation.util.ResponseCode;
 import com.skillup.presentation.util.SkillUpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -28,16 +27,47 @@ public class UserController {
         try {
             savedUserDomain = userDomainService.registry(toDomain(userInDto));
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(SkillUpResponse.builder()
-                    .msg("User already exists")
+            return ResponseEntity.status(ResponseCode.BAD_REQUEST).body(SkillUpResponse.builder()
+                    .msg(ResponseCode.USER_EXIST)
                     .build());
         }
 
         // create outDTO
-        return ResponseEntity.status(200).body( SkillUpResponse.builder()
-                .response(savedUserDomain)
+        return ResponseEntity.status(ResponseCode.SUCCESS).body(SkillUpResponse.builder()
+                .result(toOutDto(savedUserDomain))
                 .build());
 
+    }
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<SkillUpResponse> getUserById(@PathVariable("id") String userId) {
+        UserDomain userDomain = userDomainService.getUserById(userId);
+
+        // user has not found by id.
+        if (Objects.isNull(userDomain)) {
+            return ResponseEntity.status(ResponseCode.BAD_REQUEST).body(SkillUpResponse.builder()
+                    .msg(String.format(ResponseCode.USER_ID_WRONG, userId))
+                    .build());
+        }
+        // user found
+        return ResponseEntity.status(ResponseCode.SUCCESS).body(SkillUpResponse.builder()
+                .result(toOutDto(userDomain))
+                .build());
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<SkillUpResponse> getUserByName(@PathVariable("name") String userName) {
+        UserDomain userDomain = userDomainService.getUserByName(userName);
+
+        // user has not found by name
+        if (Objects.isNull(userDomain)) {
+            return ResponseEntity.status(ResponseCode.BAD_REQUEST).body(SkillUpResponse.builder()
+                    .msg(String.format(ResponseCode.USER_NAME_WRONG, userName))
+                    .build());
+        }
+        return ResponseEntity.status(ResponseCode.BAD_REQUEST).body(SkillUpResponse.builder()
+                .result(toOutDto(userDomain))
+                .build());
     }
 
     private UserDomain toDomain(UserInDto userInDto) {

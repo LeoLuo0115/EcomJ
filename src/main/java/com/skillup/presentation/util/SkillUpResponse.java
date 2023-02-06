@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SkillUpResponse {
-    private Object response;
+    private Object result;
     private String msg;
 }
