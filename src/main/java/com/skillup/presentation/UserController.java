@@ -1,7 +1,7 @@
 package com.skillup.presentation;
 
-import com.skillup.domain.UserDomain;
-import com.skillup.domain.UserDomainService;
+import com.skillup.domain.user.UserDomain;
+import com.skillup.domain.user.UserDomainService;
 import com.skillup.presentation.dto.in.UserInDto;
 import com.skillup.presentation.dto.in.UserPin;
 import com.skillup.presentation.dto.out.UserOutDto;

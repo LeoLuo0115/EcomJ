@@ -1,4 +1,4 @@
-package com.skillup.domain;
+package com.skillup.domain.user;
 
 public interface UserRepository {
     void createUser(UserDomain userDomain);

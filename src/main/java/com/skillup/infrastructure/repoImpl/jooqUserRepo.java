@@ -1,12 +1,10 @@
 package com.skillup.infrastructure.repoImpl;
 
-import com.skillup.domain.UserDomain;
-import com.skillup.domain.UserRepository;
+import com.skillup.domain.user.UserDomain;
+import com.skillup.domain.user.UserRepository;
 import com.skillup.infrastructure.jooq.tables.User;
 import com.skillup.infrastructure.jooq.tables.records.UserRecord;
 import org.jooq.DSLContext;
-import org.jooq.TableRecord;
-import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
