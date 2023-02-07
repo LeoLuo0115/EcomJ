@@ -21,4 +21,9 @@ public class UserDomainService {
     public UserDomain getUserByName(String userName) {
         return userRepository.getUserByName(userName);
     }
+
+    public UserDomain updateUserPassword(UserDomain userDomain) {
+        userRepository.updateUser(userDomain);
+        return userDomain;
+    }
 }

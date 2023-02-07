@@ -27,7 +27,7 @@ public class jooqUserRepo implements UserRepository {
 
     @Override
     public void updateUser(UserDomain userDomain) {
-
+        dslContext.executeUpdate(toRecord(userDomain));
     }
 
     @Override

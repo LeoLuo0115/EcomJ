@@ -3,6 +3,7 @@ package com.skillup.presentation;
 import com.skillup.domain.UserDomain;
 import com.skillup.domain.UserDomainService;
 import com.skillup.presentation.dto.in.UserInDto;
+import com.skillup.presentation.dto.in.UserPin;
 import com.skillup.presentation.dto.out.UserOutDto;
 import com.skillup.presentation.util.ResponseCode;
 import com.skillup.presentation.util.SkillUpResponse;
@@ -68,6 +69,57 @@ public class UserController {
         return ResponseEntity.status(ResponseCode.BAD_REQUEST).body(SkillUpResponse.builder()
                 .result(toOutDto(userDomain))
                 .build());
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<SkillUpResponse> login(@RequestBody UserInDto userInDto) {
+        // check user by username
+        UserDomain userDomain = userDomainService.getUserByName(userInDto.getUserName());
+
+        if (Objects.isNull(userDomain)) {
+            return ResponseEntity.status(ResponseCode.BAD_REQUEST).body(SkillUpResponse.builder()
+                    .msg(String.format(ResponseCode.USER_NAME_WRONG, userInDto.getUserName()))
+                    .build());
+        }
+
+        // password match
+        if (!userInDto.getPassword().equals(userDomain.getPassword())) {
+            return ResponseEntity.status(ResponseCode.BAD_REQUEST).body(SkillUpResponse.builder()
+                    .msg(ResponseCode.PASSWORD_NOT_MATCH)
+                    .build());
+        }
+
+        // match return
+        return ResponseEntity.status(ResponseCode.SUCCESS).body(SkillUpResponse.builder()
+                .result(toOutDto(userDomain))
+                .build());
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<SkillUpResponse> updatePassword(@RequestBody UserPin userPin) {
+        // get user
+        UserDomain userDomain = userDomainService.getUserByName(userPin.getUserName());
+
+        // user exist
+        if (Objects.isNull(userDomain)) {
+            return ResponseEntity.status(ResponseCode.BAD_REQUEST).body(SkillUpResponse.builder()
+                    .msg(String.format(ResponseCode.USER_NAME_WRONG, userPin.getUserName()))
+                    .build());
+        }
+        // check password
+        if (!userPin.getOldPassword().equals(userDomain.getPassword())) {
+            return ResponseEntity.status(ResponseCode.BAD_REQUEST).body(SkillUpResponse.builder()
+                    .msg(ResponseCode.PASSWORD_NOT_MATCH)
+                    .build());
+        }
+
+        // update password
+        userDomain.setPassword(userPin.getNewPassword());
+        UserDomain updatedUserDomain = userDomainService.updateUserPassword(userDomain);
+        return ResponseEntity.status(ResponseCode.SUCCESS).body(SkillUpResponse.builder()
+                .result(toOutDto(updatedUserDomain))
+                .build());
+
     }
 
     private UserDomain toDomain(UserInDto userInDto) {
