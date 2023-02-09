@@ -3,6 +3,7 @@ package com.skillup.apiPresentation;
 import com.skillup.apiPresentation.dto.in.PromotionInDto;
 import com.skillup.apiPresentation.dto.out.PormotionOutDto;
 import com.skillup.apiPresentation.util.ResponseUtil;
+import com.skillup.application.promotion.PromotionApplication;
 import com.skillup.domian.promotion.PromotionDomain;
 import com.skillup.domian.promotion.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class PromotionController {
     @Autowired
     PromotionService promotionService;
 
+    @Autowired
+    PromotionApplication promotionApplication;
+
 
     @PostMapping
     ResponseEntity<PormotionOutDto> createPromotion(@RequestBody PromotionInDto promotionInDto) {
@@ -30,12 +34,16 @@ public class PromotionController {
 
     @GetMapping("/id/{id}")
     ResponseEntity<PormotionOutDto> getPromotionById(@PathVariable("id") String promotionId) {
-        PromotionDomain promotionDomain = promotionService.getPromotionById(promotionId);
+        PromotionDomain promotionDomain = promotionApplication.getPromotionById(promotionId);
+        if (Objects.isNull(promotionDomain)) {
+            return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(null);
+        }
         return ResponseEntity.status(ResponseUtil.SUCCESS).body(toOutDto(promotionDomain));
     }
 
     @GetMapping("/status/{status}")
     public ResponseEntity<List<PormotionOutDto>> getPromotionByStatus(@PathVariable("status") Integer promotionStatus) {
+        // TODO: ADD CACHE SUPPORT
         List<PromotionDomain> promotionDomainList = promotionService.getPromotionByStatus(promotionStatus);
         return ResponseEntity.status(ResponseUtil.SUCCESS).body(
                 promotionDomainList.stream().map(this::toOutDto).collect(Collectors.toList())
