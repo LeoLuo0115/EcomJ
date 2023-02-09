@@ -1,4 +1,4 @@
-package com.skillup.application.order.subscriber;
+package com.skillup.application.order.mq.subscriber;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.MessageExt;
