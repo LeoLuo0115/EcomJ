@@ -10,11 +10,9 @@ import com.skillup.domain.CommodityDomainService;
 import com.skillup.domain.UserDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -33,6 +31,18 @@ public class CommodityController {
 
         return ResponseEntity.status(SkillUpResponseUtil.SUCCESS).body(
                 toOutDto(savedCommodityDomain));
+    }
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<CommodityOutDto> getCommodityById(@PathVariable("id") String commodityId){
+        CommodityDomain commodityDomain = commodityDomainService.getCommodityById(commodityId);
+        // commodity doesn't exist
+        if (Objects.isNull(commodityDomain)){
+            return ResponseEntity.status(SkillUpResponseUtil.BAD_REQUEST).body(null);
+        }
+        return ResponseEntity.status(SkillUpResponseUtil.SUCCESS).body(
+                toOutDto(commodityDomain)
+        );
     }
 
     private CommodityDomain toDomain(CommodityInDto commodityInDto){
