@@ -55,6 +55,19 @@ rocketmq:
 # costumer config
 promotion:
   stock-strategy: optimistic # [oversell, sync, optimistic]
+  topic:
+    lock-stock: lock-stock
+    lock-stock-group: LS-G
+    revert-stock: revert-stock
+    revert-stock-group: RS-G
+    deduct-stock: deduct-stock
+    deduct-stock-group: DS-G
 order:
   data-center: 1
   machine-num: 1
+  topic:
+    create-order: create-order
+    create-order-group: CO-G
+    pay-check: pay-check
+    pay-check-group: PC-G
+  delay-time: 60
