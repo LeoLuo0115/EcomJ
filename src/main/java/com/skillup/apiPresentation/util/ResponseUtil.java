@@ -1,4 +1,4 @@
-package com.skillup.APIpresentation.util;
+package com.skillup.apiPresentation.util;
 
 public class ResponseUtil {
     public static final int SUCCESS = 200;

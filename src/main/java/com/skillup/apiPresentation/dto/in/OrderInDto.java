@@ -1,4 +1,4 @@
-package com.skillup.APIpresentation.dto.out;
+package com.skillup.apiPresentation.dto.in;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserOutDto {
+public class OrderInDto {
+    private String promotionId;
+
+    private String promotionName;
+
     private String userId;
-    private String userName;
+
+    private Integer orderAmount;
+
 }

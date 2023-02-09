@@ -20,8 +20,6 @@ public class SyncStockStrategy implements StockOperation {
             if (promotionDomain.getAvailableStock() > 0)  {
                 promotionDomain.setAvailableStock(promotionDomain.getAvailableStock() - 1L);
                 promotionDomain.setLockStock(promotionDomain.getLockStock() + 1);
-                // update自带数据库排他锁，所以只有一个线程可以写
-                // 所以10个线程进来，改好数据，但是写入的全都时相同的数据
                 promotionRepository.updatePromotion(promotionDomain);
                 System.out.println(promotionDomain.getPromotionName() + "start Synchronized locking... ");
                 return true;

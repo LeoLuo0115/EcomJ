@@ -1,4 +1,4 @@
-package com.skillup.APIpresentation.dto.in;
+package com.skillup.apiPresentation.dto.in;
 
 
 import lombok.AllArgsConstructor;
@@ -10,8 +10,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserInPin {
-    private String userName;
-    private String oldPassword;
-    private String newPassword;
+public class CommodityInDto {
+    String commodityName;
+
+    String description;
+
+    Integer price;
+
+    String imageUrl;
 }

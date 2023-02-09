@@ -9,6 +9,8 @@ import com.skillup.infrastructure.jooq.tables.records.PromotionRecord;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +45,7 @@ public class JOOQPromotionRepo implements PromotionRepository, StockOperation {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public boolean lockStock(String id) {
         /**
          * update promotion

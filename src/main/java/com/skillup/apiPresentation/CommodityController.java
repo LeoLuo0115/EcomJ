@@ -1,15 +1,16 @@
-package com.skillup.APIpresentation;
+package com.skillup.apiPresentation;
 
 
-import com.skillup.APIpresentation.dto.in.CommodityInDto;
-import com.skillup.APIpresentation.dto.out.CommodityOutDto;
-import com.skillup.APIpresentation.util.ResponseUtil;
+import com.skillup.apiPresentation.dto.in.CommodityInDto;
+import com.skillup.apiPresentation.dto.out.CommodityOutDto;
+import com.skillup.apiPresentation.util.ResponseUtil;
 import com.skillup.domian.commodity.CommodityDomain;
 import com.skillup.domian.commodity.CommodityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -37,9 +38,9 @@ public class CommodityController {
 
         CommodityDomain commodityDomain = commodityService.getCommodityById(commodityId);
 
-//        if(commodityDomain.equals(null)) {
-//
-//        }
+        if  (Objects.isNull(commodityDomain)) {
+            return  ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(null);
+        }
 
         return ResponseEntity.status(ResponseUtil.SUCCESS).body(toOutDto(commodityDomain));
     }

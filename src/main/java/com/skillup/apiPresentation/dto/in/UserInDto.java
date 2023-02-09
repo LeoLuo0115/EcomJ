@@ -1,5 +1,4 @@
-package com.skillup.APIpresentation.util;
-
+package com.skillup.apiPresentation.dto.in;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SkillUpResponse {
-    Object result;
-    String msg;
+public class UserInDto {
+    private String userName;
+    private String password;
 }

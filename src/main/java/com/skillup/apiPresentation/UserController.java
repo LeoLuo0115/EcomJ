@@ -1,10 +1,10 @@
-package com.skillup.APIpresentation;
+package com.skillup.apiPresentation;
 
-import com.skillup.APIpresentation.dto.in.UserInDto;
-import com.skillup.APIpresentation.dto.in.UserInPin;
-import com.skillup.APIpresentation.dto.out.UserOutDto;
-import com.skillup.APIpresentation.util.ResponseUtil;
-import com.skillup.APIpresentation.util.SkillUpResponse;
+import com.skillup.apiPresentation.dto.in.UserInDto;
+import com.skillup.apiPresentation.dto.in.UserInPin;
+import com.skillup.apiPresentation.dto.out.UserOutDto;
+import com.skillup.apiPresentation.util.ResponseUtil;
+import com.skillup.apiPresentation.util.SkillUpResponse;
 import com.skillup.domian.user.UserDomain;
 import com.skillup.domian.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

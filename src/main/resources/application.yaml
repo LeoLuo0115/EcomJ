@@ -14,3 +14,7 @@ spring:
 
 promotion:
   stock-strategy: optimistic #[sync, overSell, optimistic]
+
+order:
+  data-center: 1
+  machine-num: 1

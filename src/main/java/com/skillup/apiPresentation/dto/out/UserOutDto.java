@@ -1,5 +1,4 @@
-package com.skillup.APIpresentation.dto.in;
-
+package com.skillup.apiPresentation.dto.out;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,12 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CommodityInDto {
-    String commodityName;
-
-    String description;
-
-    Integer price;
-
-    String imageUrl;
+public class UserOutDto {
+    private String userId;
+    private String userName;
 }
