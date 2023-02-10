@@ -1,4 +1,4 @@
-package com.skillup.infrastructure.repoImpl;
+package com.skillup.infrastructure.repolmpl;
 
 public interface DomainRecord<D, R> {
     public D toDomain(R r);

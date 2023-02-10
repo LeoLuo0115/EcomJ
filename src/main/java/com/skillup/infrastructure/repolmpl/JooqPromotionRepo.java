@@ -1,4 +1,4 @@
-package com.skillup.infrastructure.repoImpl;
+package com.skillup.infrastructure.repolmpl;
 
 import com.skillup.domain.promotion.PromotionDomain;
 import com.skillup.domain.promotion.PromotionRepository;
@@ -9,12 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository(value = "optimistic")
 @Slf4j
-public class JooqPromotionRepo implements PromotionRepository, StockOperation, DomainRecord<PromotionDomain, PromotionRecord>{
+public class JooqPromotionRepo implements PromotionRepository, StockOperation{
     @Autowired
     DSLContext dslContext;
 

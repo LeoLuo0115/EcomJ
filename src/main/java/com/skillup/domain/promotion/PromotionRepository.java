@@ -1,6 +1,8 @@
 package com.skillup.domain.promotion;
-import java.util.List;
 
+import com.skillup.infrastructure.jooq.tables.records.PromotionRecord;
+
+import java.util.List;
 public interface PromotionRepository {
 
     void createPromotion(PromotionDomain promotionDomain);
@@ -10,4 +12,8 @@ public interface PromotionRepository {
     List<PromotionDomain> getPromotionByPromotionStatus(Integer Status);
 
     void updatePromotion(PromotionDomain promotionDomain);
+
+    PromotionDomain toDomain(PromotionRecord record);
+
+    PromotionRecord toRecord(PromotionDomain domain);
 }
