@@ -1,21 +1,23 @@
-package com.skillup.infrastructure.repolmpl;
-
+package com.skillup.infrastructure.repoImpl;
 
 import com.skillup.domain.promotion.PromotionDomain;
 import com.skillup.domain.promotion.PromotionRepository;
 import com.skillup.domain.promotion.StockOperation;
 import com.skillup.infrastructure.jooq.tables.Promotion;
+import com.skillup.infrastructure.jooq.tables.records.PromotionRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository(value = "optimistic")
 @Slf4j
-public class JooqPromotionRepo implements PromotionRepository, StockOperation, DomainRecord<PromotionDomain, DomainRecord>{
+public class JooqPromotionRepo implements PromotionRepository, StockOperation, DomainRecord<PromotionDomain, PromotionRecord>{
     @Autowired
     DSLContext dslContext;
+
     public static final Promotion P_T = new Promotion();
     @Override
     public void createPromotion(PromotionDomain promotionDomain) {
@@ -58,7 +60,7 @@ public class JooqPromotionRepo implements PromotionRepository, StockOperation, D
 
     @Override
     public boolean deductStock(String id) {
-        /*
+        /**
          * update promotion
          * set lock_stock = lock_stock - 1
          * where id = promotion_id and lock_stock > 0
@@ -87,7 +89,7 @@ public class JooqPromotionRepo implements PromotionRepository, StockOperation, D
 
 
     @Override
-    public PromotionDomain toDomain(com.skillup.infrastructure.repolmpl.DomainRecord record) {
+    public PromotionDomain toDomain(PromotionRecord record) {
         return PromotionDomain.builder()
                 .promotionId(record.getPromotionId())
                 .promotionName(record.getPromotionName())
@@ -105,8 +107,8 @@ public class JooqPromotionRepo implements PromotionRepository, StockOperation, D
     }
 
     @Override
-    public com.skillup.infrastructure.repolmpl.DomainRecord toRecord(PromotionDomain domain) {
-        return new com.skillup.infrastructure.repolmpl.DomainRecord(
+    public PromotionRecord toRecord(PromotionDomain domain) {
+        return new PromotionRecord(
                 domain.getPromotionId(),
                 domain.getPromotionName(),
                 domain.getCommodityId(),
