@@ -8,7 +8,6 @@ import com.skillup.domain.promotion.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -91,9 +90,9 @@ public class PromotionController {
                 .startTime(promotionInDto.getStartTime())
                 .endTime(promotionInDto.getEndTime())
                 .originalPrice(promotionInDto.getOriginalPrice())
-                .promotionalPrice(promotionInDto.getPromotionalPrice())
+                .promotionalPrice(promotionInDto.getPromotionPrice())
                 .totalStock(promotionInDto.getTotalStock())
-                .availableStock(promotionInDto.getAvailableStock())
+                .availableStock(promotionInDto.getAvaliableStock())
                 .lockStock(promotionInDto.getLockStock())
                 .imageUrl(promotionInDto.getImageUrl())
                 .status(promotionInDto.getStatus())
@@ -111,7 +110,7 @@ public class PromotionController {
                 .availableStock(promotionDomain.getAvailableStock())
                 .lockStock(promotionDomain.getLockStock())
                 .originalPrice(promotionDomain.getOriginalPrice())
-                .promotionalPrice(promotionDomain.getPromotionalPrice())
+                .promotionPrice(promotionDomain.getPromotionalPrice())
                 .imageUrl(promotionDomain.getImageUrl())
                 .status(promotionDomain.getStatus())
                 .build();
