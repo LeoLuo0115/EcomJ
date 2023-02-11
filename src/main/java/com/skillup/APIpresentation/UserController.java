@@ -6,7 +6,7 @@ import com.skillup.APIpresentation.dto.out.UserOutDto;
 import com.skillup.APIpresentation.util.ResponseUtil;
 import com.skillup.APIpresentation.util.SkillUpResponse;
 import com.skillup.domian.user.UserDomain;
-import com.skillup.domian.user.UserDomainService;
+import com.skillup.domian.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +28,7 @@ public class UserController {
     // 并且把 单例存到一个 map里, 使用关键词 @Autowired 来使用存放的 单例
 
     @Autowired
-    UserDomainService userDomainService;
+    UserService userService;
 
     // API
     @PostMapping
@@ -40,7 +40,7 @@ public class UserController {
 
         try {
             // call domain service to create user
-            saveduserDomain = userDomainService.registry(toDomain(userInDto));
+            saveduserDomain = userService.registry(toDomain(userInDto));
         } catch (Exception e) {
             // provide error message, set result equals null
             return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(ResponseUtil.USER_EXISTS).build());
@@ -55,7 +55,7 @@ public class UserController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<SkillUpResponse> getUserByID(@PathVariable("id") String userID) {
-        UserDomain userDomain = userDomainService.getUserByID(userID);
+        UserDomain userDomain = userService.getUserByID(userID);
 
         // user not exist
         if (Objects.isNull(userDomain)) {
@@ -68,7 +68,7 @@ public class UserController {
 
     @GetMapping("/name/{name}")
     public ResponseEntity<SkillUpResponse> getUserByName(@PathVariable("name") String name) {
-        UserDomain userDomain = userDomainService.getUserByName(name);
+        UserDomain userDomain = userService.getUserByName(name);
 
         if (Objects.isNull(userDomain)) {
             return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(String.format(ResponseUtil.USER_NAME_WRONG, name)).build());
@@ -81,7 +81,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<SkillUpResponse> login(@RequestBody UserInDto userInDto) {
         // 1. get user by name
-        UserDomain userDomain = userDomainService.getUserByName(userInDto.getUserName());
+        UserDomain userDomain = userService.getUserByName(userInDto.getUserName());
 
         // 2. check user exists
         if(Objects.isNull(userDomain)) {
@@ -100,7 +100,7 @@ public class UserController {
     @PutMapping("/password")
     public ResponseEntity<SkillUpResponse> updatePassword(@RequestBody UserInPin userInPin) {
         // 1. get user
-        UserDomain userDomain = userDomainService.getUserByName(userInPin.getUserName());
+        UserDomain userDomain = userService.getUserByName(userInPin.getUserName());
 
         // 2. user not exists
         if(Objects.isNull(userDomain)) {
@@ -113,7 +113,7 @@ public class UserController {
 
         // 4. update new pin
         userDomain.setPassword(userInPin.getNewPassword());
-        UserDomain updateedUserDomain = userDomainService.updateUser(userDomain);
+        UserDomain updateedUserDomain = userService.updateUser(userDomain);
         return ResponseEntity.status(ResponseUtil.SUCCESS).body(SkillUpResponse.builder().result(toOutDto(updateedUserDomain)).build());
     }
 
