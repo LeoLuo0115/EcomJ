@@ -3,11 +3,13 @@ package com.skillup.domain.promotion.stockStrategy;
 import com.skillup.domain.promotion.PromotionDomain;
 import com.skillup.domain.promotion.PromotionRepository;
 import com.skillup.domain.promotion.StockOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 @Service(value = "sync")
+@Slf4j
 public class SyncStockStrategy implements StockOperation {
 
     @Autowired
@@ -20,7 +22,7 @@ public class SyncStockStrategy implements StockOperation {
                 promotionDomain.setAvailableStock(promotionDomain.getAvailableStock() - 1L);
                 promotionDomain.setLockStock(promotionDomain.getLockStock() + 1L);
                 promotionRepository.updatePromotion(promotionDomain);
-                System.out.println(promotionDomain.getPromotionName() + "Start Sync locking...");
+                log.info(promotionDomain.getPromotionName() + "Start Sync locking...");
                 return true;
             }
             return false;

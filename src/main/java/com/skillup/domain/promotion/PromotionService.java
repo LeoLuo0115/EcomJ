@@ -32,6 +32,10 @@ public class PromotionService {
     }
 
     public boolean deductStock(String id) {
-        return true;
+        return stockOperation.deductStock(id);
+    }
+
+    public boolean revertStock(String id) {
+        return stockOperation.revertStock(id);
     }
 }

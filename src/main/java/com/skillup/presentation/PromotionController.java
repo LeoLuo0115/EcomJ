@@ -62,7 +62,17 @@ public class PromotionController {
             return ResponseEntity.status(ResponseCode.BAD_REQUEST).body(false);
         }
         boolean isDeducted = promotionService.deductStock(id);
-        return ResponseEntity.status(ResponseCode.SUCCESS).body(true);
+        return ResponseEntity.status(ResponseCode.SUCCESS).body(isDeducted);
+    }
+
+    @PostMapping("/revert/id/{id}")
+    public ResponseEntity<Boolean> revertPromotionStock(@PathVariable("id") String id) {
+        PromotionDomain promotionDomain = promotionService.getPromotionById(id);
+        if (Objects.isNull(promotionDomain)) {
+            return ResponseEntity.status(ResponseCode.BAD_REQUEST).body(false);
+        }
+        boolean isReverted = promotionService.revertStock(id);
+        return ResponseEntity.status(ResponseCode.SUCCESS).body(isReverted);
     }
 
 

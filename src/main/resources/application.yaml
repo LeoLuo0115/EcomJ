@@ -13,4 +13,4 @@ spring:
     enabled: true
 
 promotion:
-  stock-strategy: oversell
+  stock-strategy: sync # optimistic, oversell, sync
