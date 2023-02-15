@@ -1,4 +1,4 @@
-package com.skillup.domian.promotion;
+package com.skillup.domian.promotionSql;
 
 public interface StockOperation {
     boolean lockStock(String id);

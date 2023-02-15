@@ -1,4 +1,4 @@
-package com.skillup.domian.promotion;
+package com.skillup.domian.promotionSql;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

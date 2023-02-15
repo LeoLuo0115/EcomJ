@@ -1,4 +1,4 @@
-package com.skillup.domian.cache;
+package com.skillup.domian.promotionCache;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CacheDomain {
+public class PromotionCacheDomain {
     private String promotionId;
 
     private String promotionName;

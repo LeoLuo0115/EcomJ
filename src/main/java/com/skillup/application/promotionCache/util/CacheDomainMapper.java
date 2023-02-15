@@ -1,11 +1,11 @@
-package com.skillup.application.promotion.util;
+package com.skillup.application.promotionCache.util;
 
-import com.skillup.domian.cache.CacheDomain;
-import com.skillup.domian.promotion.PromotionDomain;
+import com.skillup.domian.promotionCache.PromotionCacheDomain;
+import com.skillup.domian.promotionSql.PromotionDomain;
 
 public class CacheDomainMapper {
-    public static CacheDomain domainToCache(PromotionDomain domain) {
-        return CacheDomain.builder()
+    public static PromotionCacheDomain domainToCache(PromotionDomain domain) {
+        return PromotionCacheDomain.builder()
                 .promotionId(domain.getPromotionId())
                 .promotionName(domain.getPromotionName())
                 .commodityId(domain.getCommodityId())
@@ -21,7 +21,7 @@ public class CacheDomainMapper {
                 .build();
     }
 
-    public static PromotionDomain cacheToDomain(CacheDomain cache) {
+    public static PromotionDomain cacheToDomain(PromotionCacheDomain cache) {
         return PromotionDomain.builder()
                 .promotionId(cache.getPromotionId())
                 .promotionName(cache.getPromotionName())

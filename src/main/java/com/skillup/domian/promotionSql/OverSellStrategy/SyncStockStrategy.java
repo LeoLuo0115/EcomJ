@@ -1,8 +1,8 @@
-package com.skillup.domian.promotion.OverSellStrategy;
+package com.skillup.domian.promotionSql.OverSellStrategy;
 
-import com.skillup.domian.promotion.PromotionDomain;
-import com.skillup.domian.promotion.PromotionRepository;
-import com.skillup.domian.promotion.StockOperation;
+import com.skillup.domian.promotionSql.PromotionDomain;
+import com.skillup.domian.promotionSql.PromotionRepository;
+import com.skillup.domian.promotionSql.StockOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

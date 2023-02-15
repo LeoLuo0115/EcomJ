@@ -1,9 +1,9 @@
 package com.skillup.infrastructure.repoImplement;
 
 
-import com.skillup.domian.promotion.PromotionDomain;
-import com.skillup.domian.promotion.PromotionRepository;
-import com.skillup.domian.promotion.StockOperation;
+import com.skillup.domian.promotionSql.PromotionDomain;
+import com.skillup.domian.promotionSql.PromotionRepository;
+import com.skillup.domian.promotionSql.StockOperation;
 import com.skillup.infrastructure.jooq.tables.Promotion;
 import com.skillup.infrastructure.jooq.tables.records.PromotionRecord;
 import org.jooq.DSLContext;
@@ -61,7 +61,7 @@ public class JOOQPromotionRepo implements PromotionRepository, StockOperation {
         return isLocked == 1;
     }
 
-    // 扣除库存，规定时间下单成功
+    // 扣除库存，规定时间下单成功, 不需要触及 available stock
     @Override
     public boolean deductStock(String id) {
         /**

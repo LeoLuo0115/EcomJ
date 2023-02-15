@@ -3,9 +3,10 @@ package com.skillup.apiPresentation;
 import com.skillup.apiPresentation.dto.in.PromotionInDto;
 import com.skillup.apiPresentation.dto.out.PormotionOutDto;
 import com.skillup.apiPresentation.util.ResponseUtil;
-import com.skillup.application.promotion.PromotionApplication;
-import com.skillup.domian.promotion.PromotionDomain;
-import com.skillup.domian.promotion.PromotionService;
+import com.skillup.application.promotionCache.CacheApplication;
+import com.skillup.domian.promotionSql.PromotionDomain;
+import com.skillup.domian.promotionSql.PromotionService;
+import com.skillup.domian.stockCache.StockCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,10 @@ public class PromotionController {
     PromotionService promotionService;
 
     @Autowired
-    PromotionApplication promotionApplication;
+    CacheApplication cacheApplication;
 
+    @Autowired
+    StockCacheService stockCacheService;
 
     @PostMapping
     ResponseEntity<PormotionOutDto> createPromotion(@RequestBody PromotionInDto promotionInDto) {
@@ -34,7 +37,7 @@ public class PromotionController {
 
     @GetMapping("/id/{id}")
     ResponseEntity<PormotionOutDto> getPromotionById(@PathVariable("id") String promotionId) {
-        PromotionDomain promotionDomain = promotionApplication.getPromotionById(promotionId);
+        PromotionDomain promotionDomain = cacheApplication.getPromotionById(promotionId);
         if (Objects.isNull(promotionDomain)) {
             return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(null);
         }
@@ -55,15 +58,18 @@ public class PromotionController {
     @PostMapping("/lock/id/{id}")
     public ResponseEntity<Boolean> lockStock(@PathVariable("id") String id) {
         // 1. check promotion existing
-        PromotionDomain promotionDomain = promotionService.getPromotionById(id);
+        PromotionDomain promotionDomain = cacheApplication.getPromotionById(id);
         if (Objects.isNull(promotionDomain)) {
             return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(false);
         }
         // 2 boolean isLocked = promotionService.lockStock(id);
-        boolean isLocked = promotionService.lockStock(id);
+        boolean isLocked = stockCacheService.lockStock(id);
         return ResponseEntity.status(ResponseUtil.SUCCESS).body(isLocked);
     }
 
+
+    // 真正的扣除库存（lock stock - 1），规定时间下单成功, 不需要触及 available stock，我们用lock stock 这个中间量来过度真正扣减库存
+    // 扣除库存一定是在数据库层面来做，如果扣减成功 lock stock - 1, 那么永远不可能还给 available stock, available stock等于真正的少了一个
     @PostMapping("/deduct/id/{id}")
     public ResponseEntity<Boolean> deductStock(@PathVariable("id") String id) {
         // 1. check promotion
@@ -81,14 +87,13 @@ public class PromotionController {
     @PostMapping("/revert/id/{id}")
     public ResponseEntity<Boolean> revertStock(@PathVariable("id") String id) {
         // 1. check promotion
-        PromotionDomain promotionDomain = promotionService.getPromotionById(id);
+        PromotionDomain promotionDomain = cacheApplication.getPromotionById(id);
         if (Objects.isNull(promotionDomain)) {
             return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(false);
         }
-        boolean isReverted = promotionService.revertStock(id);
+        boolean isReverted = stockCacheService.revertStock(id);
         return ResponseEntity.status(ResponseUtil.SUCCESS).body(isReverted);
     }
-
 
 
     private PromotionDomain toDomain(PromotionInDto promotionInDto) {
@@ -107,7 +112,7 @@ public class PromotionController {
                 .status(promotionInDto.getStatus())
                 .build();
     }
-    
+
     private PormotionOutDto toOutDto(PromotionDomain promotionDomain) {
         return PormotionOutDto.builder()
                 .promotionId(promotionDomain.getPromotionId())
@@ -124,7 +129,6 @@ public class PromotionController {
                 .imageUrl(promotionDomain.getImageUrl())
                 .build();
     }
-
 
 
 }
