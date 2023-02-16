@@ -3,25 +3,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.skillup</groupId>
-    <artifactId>ecomj</artifactId>
-    <version>1.0.0</version>
-    <packaging>pom</packaging>
-    <modules>
-        <module>template</module>
-        <module>user-app</module>
-        <module>commodity-app</module>
-        <module>promotion-app</module>
-        <module>order-app</module>
-    </modules>
-
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.3</version> <!-- spring boot version number -->
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.skillup</groupId>
+        <artifactId>ecomj</artifactId>
+        <version>1.0.0</version>
     </parent>
+
+    <artifactId>user-app</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
         <!-- spring-boot basic -->
@@ -57,24 +51,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- redis dependencies -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <!-- lettuce pool 缓存连接池-->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-        </dependency>
-
-        <!-- RocketMQ Dependencies -->
-        <dependency>
-            <groupId>org.apache.rocketmq</groupId>
-            <artifactId>rocketmq-spring-boot-starter</artifactId>
-            <version>2.2.2</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-consul-discovery -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -88,19 +64,6 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
             <version>2.7.3</version>
         </dependency>
-
-        <!-- open feign-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <version>3.1.4</version>
-        </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-gateway</artifactId>-->
-<!--            <version>3.1.2</version>-->
-<!--        </dependency>-->
 
         <!-- test tools -->
         <dependency>
@@ -156,7 +119,7 @@
                     <!-- JOOQ单独配置JDBC链接 -->
                     <jdbc>
                         <driver>com.mysql.cj.jdbc.Driver</driver>
-                        <url>jdbc:mysql://localhost:3306/skillup?serverTimezone=GMT</url>
+                        <url>jdbc:mysql://localhost:3306/user-app?serverTimezone=GMT</url>
                         <user>root</user>
                         <password>rootroot</password>
                     </jdbc>
@@ -182,7 +145,7 @@
                             </excludes>
 
                             <!--数据库名称-->
-                            <inputSchema>skillup</inputSchema>
+                            <inputSchema>user-app</inputSchema>
                         </database>
 
                         <generate>
