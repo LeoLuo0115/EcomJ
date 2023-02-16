@@ -11,6 +11,7 @@ public class OrderService {
     @Autowired
     OrderRepository orderRepository;
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public OrderDomain getOrderById(Long orderNum) {
         return orderRepository.getOrderById(orderNum);
     }
@@ -18,6 +19,12 @@ public class OrderService {
     @Transactional(propagation = Propagation.REQUIRED)
     public OrderDomain createOrder(OrderDomain orderDomain) {
         orderRepository.createOrder(orderDomain);
+        return orderDomain;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public OrderDomain updateOrder(OrderDomain orderDomain) {
+        orderRepository.updateOrder(orderDomain);
         return orderDomain;
     }
 }
