@@ -13,7 +13,7 @@ CREATE TABLE promotion
     lock_stock          BIGINT              NOT NULL,
     image_url           VARCHAR(64)         NOT NULL,
     PRIMARY KEY(promotion_id)
-)   ENGINE = InnoDB     CHARSET = UTF8mb4;
+)   ENGINE = InnoDB     CHARSET=utf8;
 
 CREATE INDEX idx_promotion_commodity_id ON promotion(commodity_id);
 CREATE INDEX idx_promotion_start_time ON promotion(start_time);
