@@ -1,8 +1,8 @@
 package com.skillup.domain.stockCache;
 
 public interface StockCacheRepo {
-    boolean lockStock(String id);
-    boolean revertStock(String id);
+    boolean lockStock(StockOrderDomain stockOrderDomain);
+    boolean revertStock(StockOrderDomain stockOrderDomain);
 
 
     Long getPromotionAvailableStock(String promotionId);

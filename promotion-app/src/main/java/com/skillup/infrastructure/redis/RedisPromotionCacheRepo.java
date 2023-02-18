@@ -5,12 +5,15 @@ import com.skillup.domain.promotionCache.PromotionCacheDomain;
 import com.skillup.domain.promotionCache.PromotionCacheRepo;
 import com.skillup.domain.stockCache.StockCacheDomain;
 import com.skillup.domain.stockCache.StockCacheRepo;
+import com.skillup.domain.stockCache.StockOrderDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 @Repository
@@ -45,12 +48,17 @@ public class RedisPromotionCacheRepo implements PromotionCacheRepo, StockCacheRe
     }
 
     @Override
-    public boolean lockStock(String id) {
+    public boolean lockStock(StockOrderDomain stockOrderDomain) {
         // 0 Lua script to ACID below operations
         // 1 select form available_stock = ?
         // 2 if available_stock > 0 then update available_stock = available_stock - 1
         try {
-            Long stock = redisTemplate.execute(redisLockStockScript, Collections.singletonList(StockCacheDomain.createStockKey(id)));
+            Long stock = redisTemplate.execute(redisLockStockScript,
+                    Arrays.asList(
+                            StockCacheDomain.createStockKey(stockOrderDomain.getPromotionId()),
+                            stockOrderDomain.getOrderNum().toString(),
+                            stockOrderDomain.getOperationName().toString()
+                            ));
             if (stock >= 0) {
                 return true;
             } else {
@@ -63,9 +71,13 @@ public class RedisPromotionCacheRepo implements PromotionCacheRepo, StockCacheRe
     }
 
     @Override
-    public boolean revertStock(String id) {
+    public boolean revertStock(StockOrderDomain stockOrderDomain) {
         try {
-            Long stock = redisTemplate.execute(redisRevertStockScript, Collections.singletonList(StockCacheDomain.createStockKey(id)));
+            Long stock = redisTemplate.execute(redisRevertStockScript, Arrays.asList(
+                    StockCacheDomain.createStockKey(stockOrderDomain.getPromotionId()),
+                    stockOrderDomain.getOrderNum().toString(),
+                    stockOrderDomain.getOperationName().toString()
+            ));
             if (stock > 0) {
                 return true;
             } else {

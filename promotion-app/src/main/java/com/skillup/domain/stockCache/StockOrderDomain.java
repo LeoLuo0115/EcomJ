@@ -1,4 +1,4 @@
-package com.skillup.domain.promotionStockLog;
+package com.skillup.domain.stockCache;
 
 import com.skillup.domain.util.OperationName;
 import lombok.AllArgsConstructor;
@@ -6,19 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class PromotionStockLogDomain {
-    private String userId;
-    private Long orderNumber;
-
+public class StockOrderDomain {
     private String promotionId;
-
+    private Long orderNum;
     private OperationName operationName;
-
-    private LocalDateTime createTime;
 }

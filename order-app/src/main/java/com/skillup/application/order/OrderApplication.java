@@ -37,7 +37,7 @@ public class OrderApplication {
     public OrderDomain createBuyNowOrder(OrderDomain orderDomain) {
         // 1. check promotion exist and lock stock
         // TODO:　Idempotent
-        ResponseEntity<Boolean> booleanResponseEntity = promotionCacheApplication.lockStock(orderDomain.getPromotionId());
+        ResponseEntity<Boolean> booleanResponseEntity = promotionCacheApplication.lockStock(orderDomain.getPromotionId(), orderDomain.getOrderNumber());
         if (booleanResponseEntity.getStatusCode().equals(HttpStatus.BAD_REQUEST) || !booleanResponseEntity.hasBody() || Objects.isNull(booleanResponseEntity.getBody())) {
             orderDomain.setOrderStatus(OrderStatus.ITEM_ERROR);
             return orderDomain;

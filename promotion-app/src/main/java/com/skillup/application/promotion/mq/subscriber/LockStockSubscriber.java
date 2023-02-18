@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import com.skillup.domain.promotion.PromotionService;
 import com.skillup.domain.promotionStockLog.PromotionStockLogDomain;
 import com.skillup.domain.promotionStockLog.PromotionStockLogService;
-import com.skillup.domain.promotionStockLog.util.OperationName;
+import com.skillup.domain.util.OperationName;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
