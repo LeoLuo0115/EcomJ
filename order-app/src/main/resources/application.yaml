@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: order-app  # consul注册中心相关配置
+    name: order-app-1  # consul注册中心相关配置
   cloud:
     consul:
       host: localhost
