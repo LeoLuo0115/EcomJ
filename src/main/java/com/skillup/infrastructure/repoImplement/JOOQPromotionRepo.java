@@ -1,14 +1,16 @@
 package com.skillup.infrastructure.repoImplement;
 
 
-import com.skillup.domian.promotion.PromotionDomain;
-import com.skillup.domian.promotion.PromotionRepository;
-import com.skillup.domian.promotion.StockOperation;
+import com.skillup.domian.promotionSql.PromotionDomain;
+import com.skillup.domian.promotionSql.PromotionRepository;
+import com.skillup.domian.promotionSql.StockOperation;
 import com.skillup.infrastructure.jooq.tables.Promotion;
 import com.skillup.infrastructure.jooq.tables.records.PromotionRecord;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +45,7 @@ public class JOOQPromotionRepo implements PromotionRepository, StockOperation {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public boolean lockStock(String id) {
         /**
          * update promotion
@@ -58,7 +61,7 @@ public class JOOQPromotionRepo implements PromotionRepository, StockOperation {
         return isLocked == 1;
     }
 
-    // 扣除库存，规定时间下单成功
+    // 扣除库存，规定时间下单成功, 不需要触及 available stock
     @Override
     public boolean deductStock(String id) {
         /**
