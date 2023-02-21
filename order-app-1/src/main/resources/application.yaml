@@ -2,6 +2,8 @@ server:
   port: 8030
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: order-app-1  # consul注册中心相关配置
   cloud:

@@ -78,7 +78,7 @@ public class UserController {
             return ResponseEntity.status(SkillResponseUtil.BAD_REQUEST).body(SkillUpResponse.builder().msg(SkillResponseUtil.PASSWORD_NOT_MATCH).build());
         }
         // 4. match return
-        return ResponseEntity.status(SkillResponseUtil.SUCCESS).body(SkillUpResponse.builder().result(toOutDto(userDomain)).build());
+        return ResponseEntity.status(SkillResponseUtil.SUCCESS).header("Access-Control-Expose-Headers", "mark").header("mark", shardingKey(userDomain.getUserId())).body(SkillUpResponse.builder().result(toOutDto(userDomain)).build());
     }
 
     @PutMapping("/password")
@@ -112,5 +112,16 @@ public class UserController {
                 .userId(userDomain.getUserId())
                 .userName(userDomain.getUserName())
                 .build();
+    }
+
+    private String shardingKey(String userId) {
+        char[] chars = userId.toCharArray();
+        for (int i = chars.length - 1; i >= 0; i--) {
+            if (Character.isDigit(chars[i])) {
+                char target = chars[i];
+                return  String.valueOf(target % 2 == 0 ? 2 : 1);
+            }
+        }
+        return "1";
     }
 }

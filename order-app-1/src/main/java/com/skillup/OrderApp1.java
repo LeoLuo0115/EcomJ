@@ -9,8 +9,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-public class OrderApp {
+public class OrderApp1 {
     public static void main(String[] args) {
-        SpringApplication.run(OrderApp.class, args);
+        SpringApplication.run(OrderApp1.class, args);
     }
 }
