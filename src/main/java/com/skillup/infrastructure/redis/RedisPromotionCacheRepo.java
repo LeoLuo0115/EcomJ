@@ -1,10 +1,11 @@
 package com.skillup.infrastructure.redis;
 
 import com.alibaba.fastjson2.JSON;
-import com.skillup.domian.promotionCache.PromotionCacheDomain;
-import com.skillup.domian.promotionCache.PromotionCacheRepository;
-import com.skillup.domian.stockCache.StockCacheDomain;
-import com.skillup.domian.stockCache.StockCacheRepository;
+import com.skillup.domain.promotionCache.PromotionCacheDomain;
+import com.skillup.domain.promotionCache.PromotionCacheRepository;
+import com.skillup.domain.stockCache.StockCacheDomain;
+import com.skillup.domain.stockCache.StockCacheRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -14,6 +15,7 @@ import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.Objects;
 
+@Slf4j
 @Repository
 public class RedisPromotionCacheRepo implements PromotionCacheRepository, StockCacheRepository {
     @Autowired
@@ -56,12 +58,15 @@ public class RedisPromotionCacheRepo implements PromotionCacheRepository, StockC
         try {
             Long stock = redisTemplate.execute(redisLockStockScript, Collections.singletonList(StockCacheDomain.createStockKey(id)));
             if (stock >= 0) {
+                log.info("Redis: lock-stock successfully");
                 return true;
             } else {
                 // -1 means sold out, -2 promotion doesn't exist
+                log.info("Redis: lock-stock failed");
                 return false;
             }
         } catch (Throwable throwable) {
+            log.info("Redis: lock-stock throw error");
             throw new RuntimeException(throwable);
         }
     }
@@ -71,12 +76,15 @@ public class RedisPromotionCacheRepo implements PromotionCacheRepository, StockC
         try {
             Long stock = redisTemplate.execute(redisRevertStockScrip, Collections.singletonList(StockCacheDomain.createStockKey(id)));
             if (stock >= 0) {
+                // log.info("Redis: revert-stock successfully");
                 return true;
             } else {
                 // -1 means sold out, -2 promotion doesn't exist
+                log.info("Redis: revert-stock failed");
                 return false;
             }
         } catch (Throwable throwable) {
+            // log.info("Redis: revert-stock throw error");
             throw new RuntimeException(throwable);
         }
     }

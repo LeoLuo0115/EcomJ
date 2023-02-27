@@ -2,13 +2,14 @@ package com.skillup.apiPresentation;
 
 
 import com.skillup.apiPresentation.dto.in.OrderInDto;
+import com.skillup.apiPresentation.dto.in.OrderStatusInDto;
 import com.skillup.apiPresentation.dto.out.OrderOutDto;
 import com.skillup.apiPresentation.util.ResponseUtil;
 import com.skillup.apiPresentation.util.SnowFlake;
 import com.skillup.application.order.OrderApplication;
-import com.skillup.domian.order.OrderDomain;
-import com.skillup.domian.order.OrderService;
-import com.skillup.domian.order.util.OrderStatus;
+import com.skillup.domain.order.OrderDomain;
+import com.skillup.domain.order.OrderService;
+import com.skillup.domain.order.util.OrderStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,9 +39,25 @@ public class OrderController {
     // application 层来实现domain层互相调用的关系，来保持domain层的纯净
     @PostMapping
     public ResponseEntity<OrderOutDto> createOrder(@RequestBody OrderInDto orderInDto) {
-        OrderDomain orderDomain = orderApplication.createOrder(toDomain(orderInDto));
-        // TODO: should have change response status based on order status
+        OrderDomain orderDomain = orderApplication.createBuyNowOrder(toDomain(orderInDto));
         return ResponseEntity.status(ResponseUtil.SUCCESS).body(toOutDto(orderDomain));
+    }
+
+    @PatchMapping("/pay")
+    public ResponseEntity<OrderOutDto> payBuyNowOrder(@RequestBody OrderStatusInDto orderStatusInDto) {
+        OrderDomain orderDomain = orderApplication.payBuyNowOrder(orderStatusInDto.getOrderNumber(), orderStatusInDto.existStatus, orderStatusInDto.getExpectStatus());
+
+        if (Objects.isNull(orderDomain)) {
+            return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(toOutDto(null));
+        } else if (orderDomain.getOrderStatus().equals(OrderStatus.PAYED)) {
+            return ResponseEntity.status(ResponseUtil.SUCCESS).body(toOutDto(orderDomain));
+        } else if (orderDomain.getOrderStatus().equals(OrderStatus.CREATED)){
+            return ResponseEntity.status(ResponseUtil.INTERNAL_ERROR).body(toOutDto(orderDomain));
+        } else if (orderDomain.getOrderStatus().equals(OrderStatus.OVERTIME)) {
+            return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(toOutDto(orderDomain));
+        } else {
+            return ResponseEntity.status(ResponseUtil.INTERNAL_ERROR).body(toOutDto(orderDomain));
+        }
     }
 
     @GetMapping("/id/{id}")

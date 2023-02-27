@@ -1,7 +1,7 @@
 package com.skillup.application.promotionCache.util;
 
-import com.skillup.domian.promotionCache.PromotionCacheDomain;
-import com.skillup.domian.promotionSql.PromotionDomain;
+import com.skillup.domain.promotionCache.PromotionCacheDomain;
+import com.skillup.domain.promotionSql.PromotionDomain;
 
 public class CacheDomainMapper {
     public static PromotionCacheDomain domainToCache(PromotionDomain domain) {

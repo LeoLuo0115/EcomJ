@@ -2,11 +2,11 @@ package com.skillup.application.promotionCache;
 
 
 import com.skillup.application.promotionCache.util.CacheDomainMapper;
-import com.skillup.domian.promotionCache.PromotionCacheDomain;
-import com.skillup.domian.promotionCache.PromotionCacheService;
-import com.skillup.domian.promotionSql.PromotionDomain;
-import com.skillup.domian.promotionSql.PromotionService;
-import com.skillup.domian.stockCache.StockCacheService;
+import com.skillup.domain.promotionCache.PromotionCacheDomain;
+import com.skillup.domain.promotionCache.PromotionCacheService;
+import com.skillup.domain.promotionSql.PromotionDomain;
+import com.skillup.domain.promotionSql.PromotionService;
+import com.skillup.domain.stockCache.StockCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +58,4 @@ public class CacheApplication {
 
         return CacheDomainMapper.cacheToDomain(promotionCacheDomain);
     }
-
-
 }

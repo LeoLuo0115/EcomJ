@@ -1,9 +1,9 @@
 package com.skillup.infrastructure.repoImplement;
 
 
-import com.skillup.domian.promotionSql.PromotionDomain;
-import com.skillup.domian.promotionSql.PromotionRepository;
-import com.skillup.domian.promotionSql.StockOperation;
+import com.skillup.domain.promotionSql.PromotionDomain;
+import com.skillup.domain.promotionSql.PromotionRepository;
+import com.skillup.domain.promotionSql.StockOperation;
 import com.skillup.infrastructure.jooq.tables.Promotion;
 import com.skillup.infrastructure.jooq.tables.records.PromotionRecord;
 import org.jooq.DSLContext;

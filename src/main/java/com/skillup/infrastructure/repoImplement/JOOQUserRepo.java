@@ -1,7 +1,7 @@
 package com.skillup.infrastructure.repoImplement;
 
-import com.skillup.domian.user.UserDomain;
-import com.skillup.domian.user.UserRepository;
+import com.skillup.domain.user.UserDomain;
+import com.skillup.domain.user.UserRepository;
 import com.skillup.infrastructure.jooq.tables.User;
 import com.skillup.infrastructure.jooq.tables.records.UserRecord;
 import org.jooq.DSLContext;

@@ -1,13 +1,12 @@
 package com.skillup.infrastructure.repoImplement;
 
 
-import com.skillup.domian.order.OrderDomain;
-import com.skillup.domian.order.OrderRepository;
-import com.skillup.domian.order.util.OrderStatus;
+import com.skillup.domain.order.OrderDomain;
+import com.skillup.domain.order.OrderRepository;
+import com.skillup.domain.order.util.OrderStatus;
 import com.skillup.infrastructure.jooq.tables.Orders;
 import com.skillup.infrastructure.jooq.tables.records.OrdersRecord;
 import org.jooq.DSLContext;
-import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,13 +28,15 @@ public class JOOQOrderRepo implements OrderRepository {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public OrderDomain getOrderById(Long id) {
-        return dslContext.selectFrom(ORDERS_T).where(ORDERS_T.ORDER_NUMBER.eq(id)).fetchOptional(this::toDomain).orElse(null);
+        return dslContext.selectFrom(ORDERS_T).where(ORDERS_T.ORDER_NUMBER.eq(id)).forUpdate().fetchOptional(this::toDomain).orElse(null);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void updateOrder(OrderDomain orderDomain) {
-
+        dslContext.executeUpdate(toRecord(orderDomain));
     }
 
     public OrderDomain toDomain(OrdersRecord record) {
