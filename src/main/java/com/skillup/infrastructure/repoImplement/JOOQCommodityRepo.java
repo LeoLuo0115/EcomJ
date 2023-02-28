@@ -1,7 +1,7 @@
 package com.skillup.infrastructure.repoImplement;
 
-import com.skillup.domian.commodity.CommodityDomain;
-import com.skillup.domian.commodity.CommodityRepository;
+import com.skillup.domain.commodity.CommodityDomain;
+import com.skillup.domain.commodity.CommodityRepository;
 import com.skillup.infrastructure.jooq.tables.Commodity;
 import com.skillup.infrastructure.jooq.tables.records.CommodityRecord;
 import org.jooq.DSLContext;
