@@ -16,7 +16,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/commodity")
 public class CommodityController {
-
     @Autowired
     CommodityService commodityService;
 
