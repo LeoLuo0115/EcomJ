@@ -143,7 +143,7 @@
                     <!-- JOOQ单独配置JDBC链接 -->
                     <jdbc>
                         <driver>com.mysql.jdbc.Driver</driver>
-                        <url>jdbc:mysql://localhost:3306/skillup?serverTimezone=GMT</url>
+                        <url>jdbc:mysql://localhost:3306/promotion-app?serverTimezone=GMT</url>
                         <user>root</user>
                         <password>123456</password>
                     </jdbc>
@@ -170,7 +170,7 @@
                             </excludes>
 
                             <!--数据库名称-->
-                            <inputSchema>skillup</inputSchema>
+                            <inputSchema>promotion-app</inputSchema>
                         </database>
 
                         <generate>
