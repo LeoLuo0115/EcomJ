@@ -11,17 +11,16 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class JOOQUserRepo implements UserRepository {
+public class JooqUserRepo implements UserRepository, DomainRecord<UserDomain, UserRecord> {
 
     @Autowired
     DSLContext dslContext;
 
-    public static final User User_T = new User();
+    public static final User USER_T = new User();
 
     @Override
     public void createUser(UserDomain userDomain) {
         dslContext.executeInsert(toRecord(userDomain));
-
     }
 
 
@@ -30,30 +29,29 @@ public class JOOQUserRepo implements UserRepository {
         dslContext.executeUpdate(toRecord(userDomain));
     }
 
-
-
     @Override
     public UserDomain getUserByID(String id) {
-        Optional<UserDomain> userDomainOptional =  dslContext.selectFrom(User_T).where(User_T.USER_ID.eq(id)).fetchOptional(this::toDomain);
+        Optional<UserDomain> userDomainOptional = dslContext.selectFrom(USER_T).where(USER_T.USER_ID.eq(id)).fetchOptional(this::toDomain);
         return userDomainOptional.orElse(null);
     }
 
     @Override
     public UserDomain getUserByName(String name) {
-        Optional<UserDomain> userDomainOptional =  dslContext.selectFrom(User_T).where(User_T.USER_NAME.eq(name)).fetchOptional(this::toDomain);
+        Optional<UserDomain> userDomainOptional = dslContext.selectFrom(USER_T).where(USER_T.USER_NAME.eq(name)).fetchOptional(this::toDomain);
         return userDomainOptional.orElse(null);
     }
 
-    private UserRecord toRecord(UserDomain userDomain) {
+    @Override
+    public UserRecord toRecord(UserDomain userDomain) {
         UserRecord userRecord = new UserRecord();
         userRecord.setUserId(userDomain.getUserID());
         userRecord.setUserName(userDomain.getUserName());
         userRecord.setPassword(userDomain.getPassword());
-
         return userRecord;
     }
 
-    private UserDomain toDomain(UserRecord userRecord) {
+    @Override
+    public UserDomain toDomain(UserRecord userRecord) {
         return UserDomain.builder()
                 .userID(userRecord.getUserId())
                 .userName(userRecord.getUserName())
