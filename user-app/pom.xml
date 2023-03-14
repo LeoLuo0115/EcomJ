@@ -67,6 +67,13 @@
             <version>2.7.3</version>
         </dependency>
 
+        <!-- open feign-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>3.1.4</version>
+        </dependency>
+
         <!-- test tools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
