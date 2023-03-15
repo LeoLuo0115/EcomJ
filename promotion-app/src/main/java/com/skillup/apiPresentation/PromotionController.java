@@ -7,6 +7,8 @@ import com.skillup.application.promotionCache.CacheApplication;
 import com.skillup.domain.promotionSql.PromotionDomain;
 import com.skillup.domain.promotionSql.PromotionService;
 import com.skillup.domain.stockCache.StockCacheService;
+import com.skillup.domain.stockCache.StockOrderDomain;
+import com.skillup.domain.util.OperationName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,15 +57,21 @@ public class PromotionController {
         );
     }
 
-    @PostMapping("/lock/id/{id}")
-    public ResponseEntity<Boolean> lockStock(@PathVariable("id") String id) {
+    @PostMapping("/lock/id/{id}/order/id/{orderId}")
+    public ResponseEntity<Boolean> lockStock(@PathVariable("id") String id, @PathVariable("orderId") Long orderId) {
         // 1. check promotion existing
         PromotionDomain promotionDomain = cacheApplication.getPromotionById(id);
         if (Objects.isNull(promotionDomain)) {
             return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(false);
         }
         // 2 boolean isLocked = promotionService.lockStock(id);
-        boolean isLocked = stockCacheService.lockStock(id);
+        StockOrderDomain stockOrderDomain = StockOrderDomain.builder()
+                .promotionId(id)
+                .orderNum(orderId)
+                .operationName(OperationName.LOCK_STOCK)
+                .build();
+
+        boolean isLocked = stockCacheService.lockStock(stockOrderDomain);
         return ResponseEntity.status(ResponseUtil.SUCCESS).body(isLocked);
     }
 
@@ -84,14 +92,21 @@ public class PromotionController {
     /**
      * Revert Available Stock in Cache
      */
-    @PostMapping("/revert/id/{id}")
-    public ResponseEntity<Boolean> revertStock(@PathVariable("id") String id) {
+    @PostMapping("/revert/id/{id}/order/id/{orderId}")
+    public ResponseEntity<Boolean> revertStock(@PathVariable("id") String id, @PathVariable("orderId") Long orderId) {
         // 1. check promotion
         PromotionDomain promotionDomain = cacheApplication.getPromotionById(id);
         if (Objects.isNull(promotionDomain)) {
             return ResponseEntity.status(ResponseUtil.BAD_REQUEST).body(false);
         }
-        boolean isReverted = stockCacheService.revertStock(id);
+
+        StockOrderDomain stockOrderDomain = StockOrderDomain.builder()
+                .promotionId(id)
+                .orderNum(orderId)
+                .operationName(OperationName.REVERT_STOCK)
+                .build();
+
+        boolean isReverted = stockCacheService.revertStock(stockOrderDomain);
         return ResponseEntity.status(ResponseUtil.SUCCESS).body(isReverted);
     }
 

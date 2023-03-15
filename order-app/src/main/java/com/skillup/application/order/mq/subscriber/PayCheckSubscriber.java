@@ -65,7 +65,7 @@ public class PayCheckSubscriber implements RocketMQListener<MessageExt> {
 
             // 2. revert cache available_stock
             // TODO:　Idempotent
-            ResponseEntity<Boolean> booleanResponseEntity = promotionCacheApplication.revertStock(orderDomain.getPromotionId());
+            ResponseEntity<Boolean> booleanResponseEntity = promotionCacheApplication.revertStock(orderDomain.getPromotionId(), orderDomain.getOrderNumber());
             if (booleanResponseEntity.getStatusCode().equals(HttpStatus.BAD_REQUEST) || !booleanResponseEntity.hasBody() || Objects.isNull(booleanResponseEntity.getBody())) {
                 log.error("Promotion is not exist");
             }

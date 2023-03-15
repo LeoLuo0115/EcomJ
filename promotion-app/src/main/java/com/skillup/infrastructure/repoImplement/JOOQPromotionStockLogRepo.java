@@ -2,7 +2,7 @@ package com.skillup.infrastructure.repoImplement;
 
 import com.skillup.domain.promotionStockLog.PromotionStockLogDomain;
 import com.skillup.domain.promotionStockLog.PromotionStockLogRepo;
-import com.skillup.domain.promotionStockLog.util.OperationName;
+import com.skillup.domain.util.OperationName;
 import com.skillup.infrastructure.jooq.tables.PromotionLog;
 import com.skillup.infrastructure.jooq.tables.records.PromotionLogRecord;
 import org.jooq.DSLContext;

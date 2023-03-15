@@ -1,4 +1,4 @@
-package com.skillup.domain.promotionStockLog.util;
+package com.skillup.domain.util;
 
 public enum OperationName {
     LOCK_STOCK,

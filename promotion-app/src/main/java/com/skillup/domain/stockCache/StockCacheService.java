@@ -13,12 +13,12 @@ public class StockCacheService {
         return stockCacheRepository.getPromotionAvailableStock(promotionId);
     }
 
-    public boolean lockStock(String id) {
-        return stockCacheRepository.lockStock(id);
+    public boolean lockStock(StockOrderDomain stockOrderDomain) {
+        return stockCacheRepository.lockStock(stockOrderDomain);
     }
 
-    public boolean revertStock(String id) {
-        return stockCacheRepository.revertStock(id);
+    public boolean revertStock(StockOrderDomain stockOrderDomain) {
+        return stockCacheRepository.revertStock(stockOrderDomain);
     }
 
     public void setAvailableStock(String promotionId, Long availableStock) {

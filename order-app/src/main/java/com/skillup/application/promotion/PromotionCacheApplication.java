@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient("promotion-app")
 public interface PromotionCacheApplication {
 
-    @PostMapping("promotion/lock/id/{id}")
-    public ResponseEntity<Boolean> lockStock(@PathVariable("id") String id);
+    @PostMapping("promotion/lock/id/{id}/order/id/{orderId}")
+    public ResponseEntity<Boolean> lockStock(@PathVariable("id") String id, @PathVariable("orderId") Long orderId);
 
-    @PostMapping("promotion/revert/id/{id}")
-    public ResponseEntity<Boolean> revertStock(@PathVariable("id") String id);
+    @PostMapping("promotion/revert/id/{id}/order/id/{orderId}")
+    public ResponseEntity<Boolean> revertStock(@PathVariable("id") String id, @PathVariable("orderId") Long orderId);
 }
