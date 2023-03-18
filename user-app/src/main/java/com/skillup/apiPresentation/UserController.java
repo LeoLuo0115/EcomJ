@@ -93,7 +93,7 @@ public class UserController {
         }
 
         // 4. match return
-        return ResponseEntity.status(ResponseUtil.SUCCESS).body(SkillUpResponse.builder().result(toOutDto(userDomain)).build());
+        return ResponseEntity.status(ResponseUtil.SUCCESS).header("Access-Control-Expose-Headers", "mark").header("mark", shardingKey(userDomain.getUserID())).body(SkillUpResponse.builder().result(toOutDto(userDomain)).build());
     }
 
 
@@ -136,6 +136,17 @@ public class UserController {
                 .userId(userDomain.getUserID())
                 .userName(userDomain.getUserName())
                 .build();
+    }
+
+    private String shardingKey(String userId) {
+        char[] chars = userId.toCharArray();
+        for (int i = chars.length - 1; i >= 0; i--) {
+            if (Character.isDigit(chars[i])) {
+                char target = chars[i];
+                return  String.valueOf(target % 2 == 0 ? 2 : 1);
+            }
+        }
+        return "1";
     }
 
 }

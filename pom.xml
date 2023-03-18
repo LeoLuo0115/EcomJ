@@ -13,7 +13,8 @@
         <module>user-app</module>
         <module>commodity-app</module>
         <module>promotion-app</module>
-        <module>order-app</module>
+        <module>order-app-1</module>
+        <module>order-app-2</module>
         <module>frontend-app</module>
         <module>gateway-app</module>
     </modules>

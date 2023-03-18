@@ -9,7 +9,7 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>order-app</artifactId>
+    <artifactId>order-app-2</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -130,7 +130,7 @@
                     <!-- JOOQ单独配置JDBC链接 -->
                     <jdbc>
                         <driver>com.mysql.jdbc.Driver</driver>
-                        <url>jdbc:mysql://localhost:3306/order-app-1?serverTimezone=GMT</url>
+                        <url>jdbc:mysql://localhost:3306/order-app-2?serverTimezone=GMT</url>
                         <user>root</user>
                         <password>123456</password>
                     </jdbc>
@@ -157,7 +157,7 @@
                             </excludes>
 
                             <!--数据库名称-->
-                            <inputSchema>order-app-1</inputSchema>
+                            <inputSchema>order-app-2</inputSchema>
                         </database>
 
                         <generate>
